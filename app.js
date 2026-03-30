@@ -1,7 +1,10 @@
 if(process.env.NODE_ENV != 'production'){
     require('dotenv').config();
 }
+const dns = require('dns');
 
+// Force Node to use Google DNS
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 const express = require('express');
 const mongoose=require('mongoose');
 const app = express();
@@ -25,7 +28,7 @@ app.engine('ejs',ejsMate);
 app.use(express.static(path.join(__dirname,'/public')));
 
 const dbUrl = process.env.ATLASDB_URL ;
-console.log("USING DB URL:", dbUrl);
+// console.log("USING DB URL:", dbUrl);
 
 const ExpressError=require('./utils/ExpressError.js');
 
@@ -82,7 +85,7 @@ app.use((req,res,next)=>{
 
 app.use('/listings',listingRouter);
 app.use('/listings/:id/reviews',reviewRouter);
-app.use('/',userRouter);
+app.use('/',listingRouter);
 
 // Error handling middleware
 
