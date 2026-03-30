@@ -82,10 +82,12 @@ app.use((req,res,next)=>{
     res.locals.currUser=req.user;
     next();
 });
-
+app.get('/', (req, res) => {
+  res.redirect('/listings');
+});
 app.use('/listings',listingRouter);
 app.use('/listings/:id/reviews',reviewRouter);
-app.use('/',listingRouter);
+app.use('/',userRouter);
 
 // Error handling middleware
 
