@@ -1,44 +1,232 @@
 <style>
-  .search-btn {
-    background-color: #FF385C;
-    color: white;
-    border-radius: 25px;
-    padding: 0 1rem 0 1rem;
+  /* Navbar */
+  .navbar { height: 60px; background: #fff; }
+
+  /* Search pill */
+  .mobile-search-pill {
+    flex: 1;
+    height: 38px;
+    background: #f7f7f7;
+    border: 1px solid #ebebeb;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 8px;
+    position: relative;
   }
-  .search-btn:hover {
-    background-color: #FF385C;
-    color: white;
+  .mobile-search-pill:focus-within {
+    border-color: #fe424d;
+    background: #fff;
   }
-  .search-btn i{
-    display: inline;
-    margin-right: 0.5rem;
+  .mobile-search-pill input {
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 13px;
+    color: #222;
+    width: 100%;
   }
-  .search-inp {
-    border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
-    font-size: 1rem;
+  .mobile-search-pill input::placeholder { color: #aaa; }
+  .pill-clear {
+    background: none; border: none; cursor: pointer;
+    color: #aaa; font-size: 18px; line-height: 1; padding: 0;
+    display: none;
   }
+  .mobile-search-pill input:not(:placeholder-shown) ~ .pill-clear { display: block; }
+
+  /* Suggestions dropdown */
+  .search-suggestions {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0; right: 0;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    z-index: 1060;
+    display: none;
+    overflow: hidden;
+  }
+  .search-suggestions.show { display: block; }
+  .sugg-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 13px;
+    border-bottom: 1px solid #f5f5f5;
+    transition: background 0.1s;
+  }
+  .sugg-item:last-child { border-bottom: none; }
+  .sugg-item:hover { background: #fff5f5; }
+  .sugg-ico {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: #fff0f1; display: flex; align-items: center;
+    justify-content: center; font-size: 13px; flex-shrink: 0;
+  }
+  .sugg-name { font-weight: 500; }
+  .sugg-sub { font-size: 11px; color: #aaa; }
+  .sugg-empty { padding: 14px; font-size: 13px; color: #aaa; text-align: center; }
+
+  /* Hamburger */
+  .ham-btn {
+    background: none; border: 1px solid #ddd;
+    border-radius: 50%; width: 38px; height: 38px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 4px; padding: 10px; cursor: pointer;
+    transition: background 0.15s; flex-shrink: 0;
+  }
+  .ham-btn:hover { background: #f5f5f5; }
+  .ham-btn span {
+    display: block; width: 16px; height: 1.5px;
+    background: #333; border-radius: 2px;
+    transition: all 0.28s ease; transform-origin: center;
+  }
+  .ham-btn.open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+  .ham-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .ham-btn.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+
+  /* Drawer overlay */
+  .drawer-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.38); z-index: 1040;
+  }
+  .drawer-overlay.show { display: block; }
+
+  /* Drawer */
+  .side-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 82%; max-width: 300px;
+    background: #fff;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    z-index: 1050;
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+  }
+  .side-drawer.open { transform: translateX(0); }
+  .drawer-head {
+    padding: 1rem; border-bottom: 1px solid #f0f0f0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .drawer-close { background: none; border: none; font-size: 18px; color: #999; cursor: pointer; }
+  .d-section { padding: 0.6rem 0; border-bottom: 1px solid #f5f5f5; }
+  .d-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.07em;
+    text-transform: uppercase; color: #bbb; padding: 0 1rem 6px;
+  }
+  .d-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 9px 1rem; text-decoration: none;
+    color: #222; font-size: 14px; transition: background 0.1s;
+  }
+  .d-item:hover { background: #fafafa; color: #222; }
+  .d-ico {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .d-ico.red { background: #fff0f1; }
+  .d-ico.gray { background: #f5f5f5; }
+  .d-chev { margin-left: auto; color: #ccc; }
+  .drawer-foot {
+    margin-top: auto; padding: 1rem;
+    border-top: 1px solid #f0f0f0;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .btn-su {
+    background: #fe424d; color: #fff; border: none;
+    border-radius: 8px; padding: 11px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  .btn-li {
+    background: none; color: #222; border: 1px solid #ddd;
+    border-radius: 8px; padding: 11px; font-size: 14px; cursor: pointer;
+  }
+
+  /* Hide on desktop */
+  @media (min-width: 768px) {
+    .ham-btn, .drawer-overlay, .side-drawer,
+    .mobile-search-pill { display: none !important; }
+  }
+
+
+  .search-inp-wrap {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border: 1.5px solid transparent;
+  border-radius: 50px;
+  height: 42px;
+  padding: 0 16px;
+  gap: 8px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.search-inp-wrap:focus-within {
+  background: #fff;
+  border-color: #fe424d;
+}
+.search-inp-wrap i { color: #aaa; font-size: 14px; }
+.search-inp {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent;
+  font-size: 14px;
+  flex: 1;
+}
+.search-btn {
+  background: #fe424d !important;
+  border: none !important;
+  width: 42px; height: 42px;
+  border-radius: 50% !important;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 !important;
+  transition: background 0.15s, transform 0.1s;
+  flex-shrink: 0;
+}
+.search-btn:hover { background: #e03040 !important; transform: scale(1.05); }
+.search-btn i { color: #fff; font-size: 14px; }
 </style>
+
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-  <div class="container-fluid">
+  <div class="container-fluid gap-2">
     <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" >
-      <span class="navbar-toggler-icon"></span>
+
+    <!-- Mobile search pill (hidden on md+) -->
+    <div class="mobile-search-pill d-md-none" style="position:relative;">
+      <i class="fa-solid fa-magnifying-glass" style="font-size:13px; color:#aaa; flex-shrink:0;"></i>
+      <input type="text" id="mobileSearchInput"
+        placeholder="Search destinations..."
+        oninput="handleMobileSearch()"
+        onfocus="showMobileSuggestions()"  />
+      <button class="pill-clear" onclick="clearMobileSearch()">×</button>
+      <div class="search-suggestions" id="mobileSuggestions"></div>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button class="ham-btn d-md-none" id="hamBtn" onclick="toggleSideDrawer()">
+      <span></span><span></span><span></span>
     </button>
+
+    <!-- Desktop nav (unchanged) -->
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="/listings">Explore</a>
-      </div>
-      <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-          <input class="form-control me-2 search-inp" type="search" placeholder="Search Destinations" />
-          <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+      <div class="navbar-nav ms-auto ">
+        <form class="d-flex align-items-center gap-2" role="search" action="/listings" method="GET">
+          <div class="search-inp-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input class="search-inp" type="search" name="search" placeholder="Search Destinations" required />
+          </div>
+          <button class="search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
         </form>
       </div>
       <div class="navbar-nav ms-auto">
-        <a class="nav-link" href="/listings/new">Airbnb your home</a>
+        <a class="nav-link" href="/listings/new">add home</a>
         <% if(!currUser){ %>
-        <a class="nav-link " href="/signup"><b>Sign Up</b></a>
+        <a class="nav-link" href="/signup"><b>Sign Up</b></a>
         <a class="nav-link" href="/login"><b>Log In</b></a>
         <% } %>
         <% if(currUser){ %>
@@ -48,3 +236,118 @@
     </div>
   </div>
 </nav>
+
+<!-- Drawer (place before </body>) -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeSideDrawer()"></div>
+<div class="side-drawer" id="sideDrawer">
+  <div class="drawer-head">
+    <i class="fa-solid fa-compass" style="color:#fe424d; font-size:20px;"></i>
+    <button class="drawer-close" onclick="closeSideDrawer()">✕</button>
+  </div>
+  <div class="d-section">
+    <div class="d-label">Explore</div>
+    <a class="d-item" href="/listings/new">
+      <div class="d-ico red"><i class="fa-solid fa-plus" style="font-size:12px; color:#fe424d;"></i></div>
+      <span>Add home</span>
+      <span class="d-chev">›</span>
+    </a>
+    <a class="d-item" href="/listings">
+      <div class="d-ico gray"><i class="fa-solid fa-compass" style="font-size:12px; color:#666;"></i></div>
+      <span>Explore</span>
+      <span class="d-chev">›</span>
+    </a>
+  </div>
+  <div class="d-section">
+    <div class="d-label">Account</div>
+    <% if(!currUser){ %>
+    <!-- shown when logged out, handled in footer -->
+    <% } %>
+    <% if(currUser){ %>
+    <a class="d-item" href="/logout">
+      <div class="d-ico gray"><i class="fa-solid fa-right-from-bracket" style="font-size:12px;"></i></div>
+      <span>Log Out</span>
+    </a>
+    <% } %>
+  </div>
+  <div class="drawer-foot">
+    <% if(!currUser){ %>
+    <a href="/signup" class="btn-su" style="text-align:center; text-decoration:none;">Sign Up</a>
+    <a href="/login" class="btn-li" style="text-align:center; text-decoration:none;">Log In</a>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  const destinations = [
+    { name: 'Bali, Indonesia', sub: 'Tropical paradise', icon: '🌴' },
+    { name: 'Paris, France', sub: 'City of light', icon: '🗼' },
+    { name: 'Tokyo, Japan', sub: 'Modern meets tradition', icon: '⛩' },
+    { name: 'New York, USA', sub: 'The big apple', icon: '🗽' },
+    { name: 'Santorini, Greece', sub: 'Island getaway', icon: '🏛' },
+    { name: 'Maldives', sub: 'Luxury villas', icon: '🌊' },
+    { name: 'Dubai, UAE', sub: 'Skyline & desert', icon: '🏙' },
+    { name: 'Barcelona, Spain', sub: 'Art & architecture', icon: '🎨' },
+  ];
+
+
+  function handleMobileSearch() {
+    const q = document.getElementById('mobileSearchInput').value.trim().toLowerCase();
+    renderSuggestions(q);
+  }
+  function showMobileSuggestions() {
+    renderSuggestions(document.getElementById('mobileSearchInput').value.trim().toLowerCase());
+  }
+  function renderSuggestions(q) {
+    const box = document.getElementById('mobileSuggestions');
+    const list = q
+      ? destinations.filter(d => d.name.toLowerCase().includes(q) || d.sub.toLowerCase().includes(q))
+      : destinations.slice(0, 4);
+    if (!list.length) {
+      box.innerHTML = '<div class="sugg-empty">No destinations found</div>';
+    } else {
+      box.innerHTML = list.map(d => {
+        let name = d.name;
+        if (q) {
+          const i = name.toLowerCase().indexOf(q);
+          if (i !== -1) name = name.slice(0,i) + '<b>' + name.slice(i, i+q.length) + '</b>' + name.slice(i+q.length);
+        }
+        return `<div class="sugg-item" onclick="selectDest('${d.name}')">
+          <div class="sugg-ico">${d.icon}</div>
+          <div><div class="sugg-name">${name}</div><div class="sugg-sub">${d.sub}</div></div>
+        </div>`;
+      }).join('');
+    }
+    box.classList.add('show');
+  }
+  function selectDest(name) {
+    document.getElementById('mobileSearchInput').value = name;
+    document.getElementById('mobileSuggestions').classList.remove('show');
+    // navigate: window.location.href = '/listings?search=' + encodeURIComponent(name);
+  }
+  function clearMobileSearch() {
+    document.getElementById('mobileSearchInput').value = '';
+    document.getElementById('mobileSuggestions').classList.remove('show');
+  }
+
+  function toggleSideDrawer() {
+    document.getElementById('sideDrawer').classList.contains('open') ? closeSideDrawer() : openSideDrawer();
+  }
+  function openSideDrawer() {
+    document.getElementById('sideDrawer').classList.add('open');
+    document.getElementById('drawerOverlay').classList.add('show');
+    document.getElementById('hamBtn').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSideDrawer() {
+    document.getElementById('sideDrawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('show');
+    document.getElementById('hamBtn').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', function(e) {
+    const pill = document.querySelector('.mobile-search-pill');
+    const box = document.getElementById('mobileSuggestions');
+    if (pill && !pill.contains(e.target)) box.classList.remove('show');
+  });
+</script>
