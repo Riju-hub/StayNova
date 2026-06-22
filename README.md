@@ -15,15 +15,36 @@ StayNova is a full-stack hotel catalog platform where users can browse, create, 
 
 ## 📸 Screenshots
 
-<img width="1900" height="885" alt="image" src="https://github.com/user-attachments/assets/2317bd9b-fe52-47cd-b5aa-6ef9db2d48c9" />
+## 📸 Screenshots
 
-<img width="1037" height="796" alt="image" src="https://github.com/user-attachments/assets/d761bcfe-06fa-4dec-8b4e-dc43a30faa00" />
+### 🏠 Homepage / All Listings
+<img width="700" alt="Homepage" src="https://github.com/user-attachments/assets/2317bd9b-fe52-47cd-b5aa-6ef9db2d48c9" />
 
-<img width="832" height="462" alt="image" src="https://github.com/user-attachments/assets/edf6aad7-1eda-462d-94fd-b4d6fdbe7e83" />
+---
 
-<img width="847" height="365" alt="image" src="https://github.com/user-attachments/assets/f5e37284-2955-4a91-ab5a-8a8ebc49b1ed" />
+### 🏨 Single Listing Detail
+<img width="700" alt="Single Listing Detail" src="https://github.com/user-attachments/assets/d761bcfe-06fa-4dec-8b4e-dc43a30faa00" />
 
-<img width="1102" height="800" alt="image" src="https://github.com/user-attachments/assets/502ce944-4645-4097-b7c1-02b7928cc1cb" />
+---
+
+### 📝 Signup
+<img width="400" alt="Signup Page" src="https://github.com/user-attachments/assets/edf6aad7-1eda-462d-94fd-b4d6fdbe7e83" />
+
+---
+
+### 🔐 Login
+<img width="400" alt="Login Page" src="https://github.com/user-attachments/assets/f5e37284-2955-4a91-ab5a-8a8ebc49b1ed" />
+
+---
+
+### ➕ Create New Listing
+<img width="700" alt="Create New Listing" src="https://github.com/user-attachments/assets/502ce944-4645-4097-b7c1-02b7928cc1cb" />
+
+---
+
+### ✏️ Edit Listing
+<img width="300" alt="Edit Listing" src="https://github.com/user-attachments/assets/da14ccff-fa57-481b-9b42-58af3a9f697f" />
+
 
 ---
 
@@ -153,6 +174,6 @@ The project strictly follows MVC — Models define the data schemas, Views are E
 ## 📬 Contact
 
 **Bhabasindhu Das**
-- 📧 Gmail: *(your email)*
-- 💼 LinkedIn: *(your LinkedIn URL)*
+- 📧 Gmail: bhabasindhudas621@gmail.com
+- 💼 LinkedIn: [*(your LinkedIn URL)*](http://linkedin.com/in/bhabasindhu-das-71b147370)
 - 🐙 GitHub: [Riju-hub](https://github.com/Riju-hub)
