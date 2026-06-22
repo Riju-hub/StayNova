@@ -9,7 +9,7 @@
 
 StayNova is a full-stack hotel catalog platform where users can browse, create, edit, and delete hotel listings — with secure authentication, authorization, and cloud-based image management.
 
-> 🔗 **Live Demo:** [View StayNova](https://staynova.onrender.com) &nbsp;|&nbsp; 💻 **GitHub:** [Riju-hub/StayNova](https://github.com/Riju-hub/StayNova)
+> 🔗 **Live Demo:** [View StayNova]((https://delta-project-j8uf.onrender.com/)) &nbsp;|&nbsp; 💻 **GitHub:** [Riju-hub/StayNova](https://github.com/Riju-hub/StayNova)
 
 ---
 
