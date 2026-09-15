@@ -1,9 +1,130 @@
 <% layout("layouts/boilerplate") %>
 
-<div class="row mt-5">
-    <div class="alert alert-danger col-6 offset-3" role="alert">
-        <!-- <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg> -->
-        <h4 class="alert-heading">Error <%= statusCode %></h4>
-        <p><%= message %></p>
+<style>
+  .error-container {
+    min-height: calc(75vh - var(--nav-h-desktop, 74px));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+  }
+
+  .error-card {
+    width: 100%;
+    max-width: 480px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.06);
+    text-align: center;
+  }
+
+  .error-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: #fff0f2;
+    color: #ff385c;
+    font-size: 26px;
+    margin-bottom: 1.25rem;
+  }
+
+  .error-code {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #ff385c;
+    margin-bottom: 0.35rem;
+  }
+
+  .error-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e1e1e;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .error-message {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #717171;
+    background: #fafafa;
+    border: 1px solid #f0f0f0;
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.75rem;
+    word-break: break-word;
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-error-primary {
+    background: linear-gradient(135deg, #ff385c 0%, #e00b41 100%);
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 12px;
+    text-decoration: none;
+    border: none;
+    box-shadow: 0 4px 14px rgba(255, 56, 92, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .btn-error-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(255, 56, 92, 0.35);
+  }
+
+  .btn-error-secondary {
+    background: #ffffff;
+    color: #222222 !important;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 20px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .btn-error-secondary:hover {
+    background-color: #f7f7f7;
+    border-color: #d0d0d0;
+  }
+</style>
+
+<div class="error-container">
+  <div class="error-card">
+    <div class="error-badge">
+      <i class="fa-solid fa-triangle-exclamation"></i>
     </div>
+
+    <div class="error-code">Error <%= statusCode %></div>
+    <h2 class="error-title">Something went wrong</h2>
+
+    <div class="error-message">
+      <%= message || "We encountered an unexpected error while processing your request." %>
+    </div>
+
+    <div class="error-actions">
+      <a href="/listings" class="btn-error-primary">
+        <i class="fa-solid fa-compass me-1"></i> Back to Explore
+      </a>
+      <button onclick="history.back()" class="btn-error-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i> Go Back
+      </button>
+    </div>
+  </div>
 </div>

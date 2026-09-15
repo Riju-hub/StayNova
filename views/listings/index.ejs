@@ -1,238 +1,423 @@
 <% layout("layouts/boilerplate") %>
-<body><br>
 
 <style>
-  /* Filter bar wrapper */
-  #filters-wrap {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #f0f0f0;
-    background: #fff;
-    padding: 0 0.5rem;
+  :root {
+    --brand: #ff385c;
+    --brand-gradient: linear-gradient(135deg, #ff385c 0%, #e00b41 100%);
+    --surface-card: #ffffff;
+    --border-subtle: rgba(0, 0, 0, 0.08);
+    --text-main: #1e1e1e;
+    --text-muted: #717171;
+    --radius-card: 20px;
+  }
+
+  body {
+    background-color: #fcfcfc;
+    color: var(--text-main);
+  }
+
+  /* Sticky Category Bar with Scroll Buttons */
+  .category-filter-bar {
     position: sticky;
-    top: 5rem; /* match your navbar height */
-    z-index: 100;
+    top: var(--nav-h-mobile, 118px);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-subtle);
+    z-index: 1020;
+    padding: 0.65rem 0;
+  }
+  @media (min-width: 768px) {
+    .category-filter-bar {
+      top: var(--nav-h-desktop, 74px);
+    }
   }
 
-  /* Scrollable filter strip */
-  #filters {
+  .category-nav-container {
     display: flex;
     align-items: center;
-    gap: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
+    gap: 12px;
+  }
+
+  /* Chip-Pill Category Scroller */
+  .category-slider-wrapper {
+    position: relative;
     flex: 1;
-    padding: 10px 0;
-  }
-  #filters::-webkit-scrollbar { display: none; }
-
-  /* Each filter pill */
-  .filter {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    cursor: pointer;
-    text-decoration: none;
-    color: #717171;
-    border-bottom: 2px solid transparent;
-    transition: color 0.15s, border-color 0.15s;
-    white-space: nowrap;
-    flex-shrink: 0;
-    font-size: 11px;
-    font-weight: 500;
-  }
-  .filter i { font-size: 20px; transition: transform 0.15s; }
-  .filter:hover { color: #222; border-bottom-color: #b0b0b0; }
-  .filter:hover i { transform: scale(1.1); }
-  .filter.active { color: #222; border-bottom-color: #222; font-weight: 600; }
-  .filter.active i { transform: scale(1.1); }
-
-  /* Tax toggle */
-  .tax-toggle {
-    flex-shrink: 0;
-    margin-left: 12px;
+    overflow: hidden;
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 7px 14px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: border-color 0.15s;
-    background: #fff;
   }
-  .tax-toggle:hover { border-color: #222; }
 
-  .tax-info { display: none; }
-</style>
-
-
-<!-- <style> 
-  #filters {
+  .category-track {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-  } 
-  .filter {
-    text-align: center;
-    margin-right: 2rem;
-    margin-top: 1rem;
-    opacity: 0.7;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    padding: 4px 2px;
   }
-  .filter p { font-size: 0.8rem;}
-  .tax-info{
+  .category-track::-webkit-scrollbar {
     display: none;
   }
-  .tax-toggle {
-    border: 1px solid #000;
-    border-radius: 0.5rem;
-    margin-left: auto;
-    padding: 0.5rem 1rem;
-    height: fit-content;
-    display: flex;
+
+  /* Modern Pill Chip Design */
+  .category-chip {
+    display: inline-flex;
     align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    background: #ffffff;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
   }
-</style> -->
-<!-- <div id="filters">
-    <a href="/listings?category=Trending" class="filter">
-        <div><i class="fa-solid fa-fire"></i></div>
-        <p>Trending</p>
-    </a>
-    <a href="/listings?category=Rooms" class="filter">
-        <div><i class="fa-solid fa-bed"></i></div>
-        <p>Rooms</p>
-    </a>
-    <a href="/listings?category=Iconic Cities" class="filter">
-        <div><i class="fa-solid fa-mountain-city"></i></div>
-        <p>Iconic Cities</p>
-    </a>
-    <a href="/listings?category=Mountains" class="filter">
-        <div><i class="fa-solid fa-mountain"></i></div>
-        <p>Mountains</p>
-    </a>
-    <a href="/listings?category=Castles" class="filter">
-        <div><i class="fa-brands fa-fort-awesome"></i></div>
-        <p>Castles</p>
-    </a>
-    <a href="/listings?category=Amazing pools" class="filter">
-        <div><i class="fa-solid fa-person-swimming"></i></div>
-        <p>Amazing Pools</p>
-    </a>
-     <a href="/listings?category=Camping" class="filter">
-        <div><i class="fa-solid fa-campground"></i></div>
-        <p>Camping</p>
-    </a>
-    <a href="/listings?category=Farms" class="filter">
-        <div><i class="fa-solid fa-cow"></i></div>
-        <p>Farms</p>
-    </a>
-    <a href="/listings?category=Arctic" class="filter">
-        <div><i class="fa-regular fa-snowflake"></i></div>
-        <p>Arctic</p>
-    </a>
-    <a href="/listings" class="filter">
-        <div><i class="fa-solid fa-border-all"></i></div>
-        <p>All</p>
-    </a>
-    <div class="tax-toggle">
-        <div class="form-check-reverse form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-            <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
+  .category-chip i {
+    font-size: 14px;
+    transition: transform 0.2s ease;
+  }
+  .category-chip:hover {
+    color: var(--text-main);
+    border-color: #c9c9c9;
+    background: #f7f7f7;
+    transform: translateY(-1px);
+  }
+  .category-chip.active {
+    background: #1e1e1e;
+    color: #ffffff;
+    border-color: #1e1e1e;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .category-chip.active i {
+    color: var(--brand);
+  }
+
+  /* Scroll Nav Chevrons */
+  .scroll-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border-subtle);
+    background: #ffffff;
+    color: var(--text-main);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+  }
+  @media (min-width: 992px) {
+    .scroll-btn {
+      display: flex;
+    }
+  }
+  .scroll-btn:hover {
+    background: #f7f7f7;
+    border-color: #bbb;
+  }
+
+  /* Tax Display Pill */
+  .tax-filter-pill {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  }
+  .tax-filter-pill label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+  }
+  .form-check-input:checked {
+    background-color: var(--brand);
+    border-color: var(--brand);
+  }
+
+  /* Catalog Cards Grid */
+  .catalog-link {
+    text-decoration: none !important;
+    color: inherit !important;
+    display: block;
+    height: 100%;
+  }
+
+  .hotel-card {
+    background: var(--surface-card);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .hotel-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.09);
+  }
+
+  /* Media Preview Container */
+  .hotel-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    overflow: hidden;
+    background: #eaeaea;
+  }
+  .hotel-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hotel-card:hover .hotel-media img {
+    transform: scale(1.05);
+  }
+
+  /* Quick-action Badges */
+  .badge-category-tag {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
+  .badge-save {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    display: grid;
+    place-items: center;
+    color: #444;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+  .badge-save:hover {
+    transform: scale(1.1);
+    color: var(--brand);
+  }
+
+  /* Hotel Content Details */
+  .hotel-details {
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+  }
+  .hotel-header-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .hotel-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-main);
+    margin: 0;
+    line-height: 1.35;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
+  .hotel-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-top: 6px;
+    font-size: 13.5px;
+    color: var(--text-muted);
+  }
+  .price-amount {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+  .tax-label-badge {
+    display: none;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--brand);
+    background: #fff0f2;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-left: 6px;
+  }
+</style>
+
+<!-- Modern Pill-Chip Category Strip -->
+<div class="category-filter-bar">
+  <div class="container">
+    <div class="category-nav-container">
+      
+      <!-- Left Chevron Scroll Button -->
+      <button class="scroll-btn" onclick="scrollCategories(-240)" aria-label="Scroll left">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+
+      <!-- Category Pills Track -->
+      <div class="category-slider-wrapper">
+        <div class="category-track" id="categoryTrack">
+          <a href="/listings" class="category-chip">
+            <i class="fa-solid fa-border-all"></i>
+            <span>All Stays</span>
+          </a>
+          <a href="/listings?category=Trending" class="category-chip">
+            <i class="fa-solid fa-fire"></i>
+            <span>Trending</span>
+          </a>
+          <a href="/listings?category=Rooms" class="category-chip">
+            <i class="fa-solid fa-bed"></i>
+            <span>Rooms</span>
+          </a>
+          <a href="/listings?category=Iconic Cities" class="category-chip">
+            <i class="fa-solid fa-mountain-city"></i>
+            <span>Iconic Cities</span>
+          </a>
+          <a href="/listings?category=Mountains" class="category-chip">
+            <i class="fa-solid fa-mountain"></i>
+            <span>Mountains</span>
+          </a>
+          <a href="/listings?category=Castles" class="category-chip">
+            <i class="fa-brands fa-fort-awesome"></i>
+            <span>Castles</span>
+          </a>
+          <a href="/listings?category=Amazing pools" class="category-chip">
+            <i class="fa-solid fa-person-swimming"></i>
+            <span>Pools</span>
+          </a>
+          <a href="/listings?category=Camping" class="category-chip">
+            <i class="fa-solid fa-campground"></i>
+            <span>Camping</span>
+          </a>
+          <a href="/listings?category=Farms" class="category-chip">
+            <i class="fa-solid fa-cow"></i>
+            <span>Farms</span>
+          </a>
+          <a href="/listings?category=Arctic" class="category-chip">
+            <i class="fa-regular fa-snowflake"></i>
+            <span>Arctic</span>
+          </a>
         </div>
-    </div>
-</div> -->
+      </div>
 
-<div id="filters-wrap">
-  <div id="filters">
-    <a href="/listings?category=Trending" class="filter" onclick="setActiveFilter(event,this)">
-      <i class="fa-solid fa-fire"></i>
-      <span>Trending</span>
-    </a>
-    <a href="/listings?category=Rooms" class="filter" onclick="setActiveFilter(event,this)">
-      <i class="fa-solid fa-bed"></i>
-      <span>Rooms</span>
-    </a>
-    <a href="/listings?category=Iconic Cities" class="filter" onclick="setActiveFilter(event,this)">
-      <i class="fa-solid fa-mountain-city"></i>
-      <span>Iconic Cities</span>
-    </a>
-    <a href="/listings?category=Mountains" class="filter" onclick="setActiveFilter(event,this)">
-      <i class="fa-solid fa-mountain"></i>
-      <span>Mountains</span>
-    </a>
-    <a href="/listings?category=Castles" class="filter" onclick="setActiveFilter(event,this)">
-      <i class="fa-brands fa-fort-awesome"></i>
-      <span>Castles</span>
-    </a>
-    <a href="/listings?category=Amazing pools" class="filter" onclick="setActiveFilter(event,this)">
-      <i class="fa-solid fa-person-swimming"></i>
-      <span>Amazing Pools</span>
-    </a>
-    <a href="/listings?category=Camping" class="filter" onclick="setActiveFilter(event,this)">
-      <i class="fa-solid fa-campground"></i>
-      <span>Camping</span>
-    </a>
-    <a href="/listings?category=Farms" class="filter" onclick="setActiveFilter(event,this)">
-      <i class="fa-solid fa-cow"></i>
-      <span>Farms</span>
-    </a>
-    <a href="/listings?category=Arctic" class="filter" onclick="setActiveFilter(event,this)">
-      <i class="fa-regular fa-snowflake"></i>
-      <span>Arctic</span>
-    </a>
-    <a href="/listings" class="filter" onclick="setActiveFilter(event,this)">
-      <i class="fa-solid fa-border-all"></i>
-      <span>All</span>
-    </a>
-  </div>
+      <!-- Right Chevron Scroll Button -->
+      <button class="scroll-btn" onclick="scrollCategories(240)" aria-label="Scroll right">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
 
-  <div class="tax-toggle">
-    <div class="form-check-reverse form-switch mb-0">
-      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-      <label class="form-check-label" for="switchCheckDefault" style="font-size:12px; font-weight:500;">
-        Tax
-      </label>
+      <!-- Tax Switch Pill -->
+      <div class="tax-filter-pill d-none d-sm-flex">
+        <div class="form-check form-switch mb-0 d-flex align-items-center gap-2">
+          <input class="form-check-input mt-0" type="checkbox" role="switch" id="taxSwitchCheck">
+          <label class="form-check-label" for="taxSwitchCheck">Display Taxes</label>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
-
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+<!-- Hotel Grid Section -->
+<div class="container mt-4 mb-5">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
     <% for(let listing of allListings){ %>
-        <a href="/listings/<%= listing._id %>" class="listing-link">
-        <div class="card col listing-card">
-            <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem;">
-            <div class="card-img-overlay"></div>
-                <div class="card-body">
-                    <p class="card-text"><b><%= listing.title %></b></p>
-                    &#8377;<%= listing.price.toLocaleString("en-IN") %>/night
-                    <i class="tax-info">+18% GST</i>
-                </div>
+      <div class="col">
+        <a href="/listings/<%= listing._id %>" class="catalog-link">
+          <div class="hotel-card">
+            <div class="hotel-media">
+              <img 
+                src="<%= listing.image.url %>" 
+                alt="<%= listing.title %>"
+                loading="lazy"
+              />
+              <% if(listing.category){ %>
+                <span class="badge-category-tag"><%= listing.category %></span>
+              <% } %>
+              <button class="badge-save" type="button" aria-label="Save stay">
+                <i class="fa-regular fa-heart"></i>
+              </button>
             </div>
-        </a>
-    <% } %>
-</div>
-    <script>
-    // Highlight active filter based on current URL param
-    const params = new URLSearchParams(window.location.search);
-    const activeCategory = params.get('category');
-    document.querySelectorAll('.filter').forEach(f => {
-      const href = f.getAttribute('href');
-      if (activeCategory && href.includes(activeCategory)) f.classList.add('active');
-      else if (!activeCategory && href === '/listings') f.classList.add('active');
-    });
 
-    // Tax toggle
-    document.getElementById('switchCheckDefault').addEventListener('change', function () {
-      document.querySelectorAll('.tax-info').forEach(el => {
-        el.style.display = this.checked ? 'inline' : 'none';
+            <div class="hotel-details">
+              <div class="hotel-header-row">
+                <h3 class="hotel-title"><%= listing.title %></h3>
+              </div>
+              <div class="hotel-price-row">
+                <span class="price-amount">&#8377;<%= listing.price.toLocaleString("en-IN") %></span>
+                <span>/ night</span>
+                <span class="tax-label-badge tax-info">+18% GST</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  // Dynamic Category Chip Active State
+  const currentParams = new URLSearchParams(window.location.search);
+  const activeCategory = currentParams.get('category');
+  
+  document.querySelectorAll('.category-chip').forEach(chip => {
+    const href = chip.getAttribute('href');
+    if (activeCategory && href.includes(encodeURIComponent(activeCategory))) {
+      chip.classList.add('active');
+      chip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    } else if (!activeCategory && href === '/listings') {
+      chip.classList.add('active');
+    }
+  });
+
+  // Track Scrolling Navigation
+  function scrollCategories(val) {
+    const track = document.getElementById('categoryTrack');
+    track.scrollBy({ left: val, behavior: 'smooth' });
+  }
+
+  // Tax Toggle Synchronization
+  const taxSwitch = document.getElementById('taxSwitchCheck');
+  if (taxSwitch) {
+    taxSwitch.addEventListener('change', function () {
+      const taxBadges = document.querySelectorAll('.tax-info');
+      taxBadges.forEach(badge => {
+        badge.style.display = this.checked ? 'inline-block' : 'none';
       });
     });
-  </script>
-</body>
+  }
+</script>

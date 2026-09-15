@@ -1,106 +1,798 @@
 <% layout("layouts/boilerplate") %>
-<div class="row mt-3">
-    <div class="col-lg-8 offset-lg-4 ">
-        <h3><%= listing.title %></h3>
-    </div>
-    <div class="card col-lg-6 offset-lg-3 show-card listing-card w-80">
-        <img src="<%= listing.image.url%>" class="card-img-top show-img" alt="listing_image">
-        <div class="card-body">
-            <p class="card-text"><i>Owner by <%= listing.owner.username %></i></p>
-            <p class="card-text">Description : <%= listing.description %> </p>
-            <p class="card-text">Location: <%= listing.location %> </p>
-            <p class="card-text">Price per night: &#8377;<%= listing.price.toLocaleString("en-IN")%></p>
-            <p class="card-text">Country: <%= listing.country %></p>
-        </div>
-    </div>
-</div>
-<% if(currUser && listing.owner._id.equals(currUser._id)){ %>
-<div class="btns ">
-    <a href="/listings/<%= listing._id %>/edit" class="btn btn-info col-lg-1 offset-lg-3 edit-btn">Edit</a>
 
-    <form action="/listings/<%= listing._id %>?_method=DELETE" method="post" style="display:inline">
-        <button class="btn btn-danger offset-lg-5">Delete</button>
-    </form>
-</div> 
-<% } %>
+<style>
+  :root {
+    --brand-primary: #ff385c;
+    --brand-gradient: linear-gradient(135deg, #ff385c 0%, #e00b41 100%);
+    --surface-glass: rgba(255, 255, 255, 0.92);
+    --border-subtle: rgba(0, 0, 0, 0.07);
+    --text-primary: #1e1e1e;
+    --text-secondary: #717171;
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+  }
 
+  body {
+    background-color: #fbfbfc;
+    background-image: 
+      radial-gradient(at 15% 10%, rgba(255, 56, 92, 0.035) 0px, transparent 45%),
+      radial-gradient(at 90% 85%, rgba(255, 90, 95, 0.035) 0px, transparent 45%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+  }
 
-<div class="row col-lg-8 offset-lg-3 mb-3 mt-3"><hr>
-    <% if(currUser){ %>
-    <h4>Leave a Review</h4>
-    <form action="/listings/<%= listing._id %>/reviews" method="post" novalidate class="needs-validation">
-        <div class="mb-3 mt-3">
-            <label for="rating" class="form-label">Rating</label>
-            <fieldset class="starability-slot">
-                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
-                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                    <label for="first-rate1" title="Terrible">1 star</label>
-                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                    <label for="first-rate2" title="Not good">2 stars</label>
-                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                    <label for="first-rate3" title="Average">3 stars</label>
-                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                    <label for="first-rate4" title="Very good">4 stars</label>
-                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                    <label for="first-rate5" title="Amazing">5 stars</label>
-            </fieldset>
-        </div>
-        <div class="mb-3 mt-3">
-            <label for="comment">Comments</label>
-            <textarea id="comment" name="review[comment]" rows="10" cols="20" class="form-control" required></textarea>
-            <div class="invalid-feedback">Please add some comments for review</div>
-        </div>
-        <button class="btn btn-success mb-3">Submit</button>
-    </form><hr>
-    <% } %>
-    
-    <% if(listing.reviews.length>0){ %>
-    <div class="row">
-        <p><b>All Reviews</b></p>
-        <% for(review of listing.reviews){ %>
-        <div class="card col-lg-5 ms-3 mb-3 p-3 r-3">
-            <div class="card-body ">
-                <h5 class="card-title">@<%= review.author.username %></h5>
-                <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
-                <p class="card-text"><%= review.comment %></p>
-                
-            </div><br>
-            <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="post" class="mb-3">
-                <button class="btn btn-sm btn-dark">Delete</button>
-            </form>
-        </div>
-        <% } %>
-    </div>
-    <% } %>
-    </div>
-    <!-- <div class="col-6 offset-3 mb-3">
-        <h3>where you'll be</h3>
-        <div id="map" style="height: 400px; width: 100%;">
+  .show-container {
+    max-width: 1140px;
+    margin: 1.5rem auto 5rem;
+    padding: 0 1.25rem;
+    animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
 
-        </div>
-    </div> -->
-</div>
-<!-- <script>
-    function initMap() {
-        // Use a default value if coordinates are missing to prevent syntax errors
-        const lat = Number("<%= listing.lat %>") || 28.6139;
-        const lng = Number("<%= listing.lng %>") || 77.2090;
+  /* Header Section */
+  .stay-header {
+    margin-bottom: 1.5rem;
+  }
+  .stay-title {
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.25;
+  }
+  .stay-sub-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 14.5px;
+    color: var(--text-secondary);
+  }
+  .stay-location-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+  }
+  .stay-location-badge i {
+    color: var(--brand-primary);
+  }
 
-        const mapCoords = { lat, lng };
-        
-        const map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 9,
-            center: mapCoords,
-        });
+  /* Hero Showcase Media */
+  .hero-wrapper {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+    background: #eaeaea;
+  }
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hero-wrapper:hover .hero-img {
+    transform: scale(1.03);
+  }
+  .hero-tag-badge {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
 
-        const marker = new google.maps.Marker({
-            position: mapCoords,
-            map: map,
-            title: "<%= listing.location %>"
-        });
+  /* Split Layout */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+    align-items: start;
+  }
+  @media (min-width: 992px) {
+    .detail-grid {
+      grid-template-columns: 1.6fr 1fr;
+      gap: 2.75rem;
     }
-</script>
-<script 
-    src="https://maps.googleapis.com/maps/api/js?key=<%= process.env.MAP_API_KEY %>&callback=initMap"
-    async defer
-></script> -->
+  }
+
+  /* Host Bio & Features */
+  .host-badge-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .host-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .host-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--brand-gradient);
+    color: #fff;
+    font-weight: 700;
+    font-size: 20px;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 4px 12px rgba(255, 56, 92, 0.25);
+  }
+  .stay-desc-body {
+    padding-top: 1.5rem;
+  }
+  .stay-desc-body h5 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .stay-desc-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #484848;
+    white-space: pre-line;
+  }
+
+  /* Booking & Pricing Floating Card */
+  .booking-card {
+    background: var(--surface-glass);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border-subtle);
+    border-radius: 24px;
+    padding: 1.75rem;
+    box-shadow: var(--shadow-soft);
+    position: sticky;
+    top: calc(var(--nav-h-desktop, 74px) + 20px);
+  }
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .price-val {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+  .price-unit {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+  .tax-pill {
+    font-size: 12px;
+    color: var(--brand-primary);
+    background: #fff0f2;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  .card-perk-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  .card-perk-item i {
+    color: #27ae60;
+    font-size: 14px;
+  }
+
+  /* Owner Control Buttons */
+  .owner-action-strip {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.25rem;
+  }
+  .btn-owner-edit {
+    flex: 1;
+    background: #f5f5f5;
+    color: var(--text-primary) !important;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: 600;
+    font-size: 13.5px;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .btn-owner-edit:hover {
+    background: #ececec;
+  }
+  .btn-owner-del {
+    background: #fff0f2;
+    color: var(--brand-primary);
+    border: 1px solid rgba(255, 56, 92, 0.2);
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-weight: 600;
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .btn-owner-del:hover {
+    background: #ffe5e8;
+  }
+
+  /* =========================================
+     ADVANCED & PREMIUM REVIEWS SECTION
+     ========================================= */
+  .premium-reviews-section {
+    margin-top: 4.5rem;
+    padding-top: 2.75rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  /* Analytics & Rating Overview Card */
+  .review-score-hero {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    margin-bottom: 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media (min-width: 768px) {
+    .review-score-hero {
+      grid-template-columns: 240px 1fr;
+      align-items: center;
+      gap: 3rem;
+    }
+  }
+
+  .score-badge-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .score-badge-panel {
+      border-bottom: none;
+      border-right: 1px solid var(--border-subtle);
+      padding-bottom: 0;
+      padding-right: 2rem;
+    }
+  }
+
+  .score-big-number {
+    font-size: 3.5rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .score-big-number span {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  .score-caption {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: 6px;
+  }
+
+  /* Progress Bar Breakdown */
+  .rating-breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .breakdown-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .breakdown-label {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .breakdown-track {
+    flex: 1;
+    height: 7px;
+    background: #f0f0f2;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .breakdown-fill {
+    height: 100%;
+    background: var(--brand-gradient);
+    border-radius: 999px;
+  }
+  .breakdown-count {
+    width: 28px;
+    text-align: right;
+    font-size: 12px;
+    color: #999;
+  }
+
+  /* Review Composer Form */
+  .premium-composer {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
+    margin-bottom: 3rem;
+  }
+  .composer-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+  .composer-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #fff0f2;
+    color: var(--brand-primary);
+    display: grid;
+    place-items: center;
+    font-size: 15px;
+  }
+  .composer-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .form-control-modern {
+    width: 100%;
+    border-radius: 16px;
+    border: 1.5px solid #e8e8e8;
+    padding: 14px 16px;
+    font-size: 14.5px;
+    background: #fafafa;
+    transition: all 0.2s ease;
+    resize: vertical;
+    min-height: 100px;
+  }
+  .form-control-modern:focus {
+    background: #ffffff;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 4px rgba(255, 56, 92, 0.12);
+    outline: none;
+  }
+
+  .btn-submit-premium {
+    background: var(--brand-gradient);
+    border: none;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 14.5px;
+    border-radius: 12px;
+    padding: 12px 28px;
+    box-shadow: 0 4px 16px rgba(255, 56, 92, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+  }
+  .btn-submit-premium:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(255, 56, 92, 0.36);
+  }
+
+  /* Modern Review Card Showcase */
+  .review-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .review-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+  }
+
+  .luxury-review-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 22px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.02);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    position: relative;
+  }
+  .luxury-review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    border-color: rgba(255, 56, 92, 0.2);
+  }
+
+  .card-top-identity {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .user-cluster {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .user-badge-ring {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #f4f4f6;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    color: #333;
+    font-size: 15px;
+  }
+  .user-meta-name {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+  .user-verified-tag {
+    font-size: 11.5px;
+    color: #27ae60;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+  }
+
+  .card-quote-text {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: #4a4a4a;
+    margin-bottom: 1.25rem;
+    word-break: break-word;
+  }
+
+  .card-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid #f6f6f6;
+  }
+  .review-chip-rating {
+    background: #fff8f8;
+    color: var(--brand-primary);
+    border-radius: 8px;
+    padding: 3px 8px;
+    font-weight: 700;
+    font-size: 12.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .btn-trash-action {
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    color: #aaa;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .btn-trash-action:hover {
+    color: var(--brand-primary);
+    background: #fff0f2;
+  }
+
+  .empty-review-showcase {
+    text-align: center;
+    padding: 3.5rem 1.5rem;
+    background: #ffffff;
+    border-radius: 24px;
+    border: 2px dashed #ececec;
+  }
+
+  @keyframes fadeSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<div class="show-container">
+  
+  <!-- Listing Header -->
+  <div class="stay-header">
+    <h1 class="stay-title"><%= listing.title %></h1>
+    <div class="stay-sub-bar">
+      <div class="stay-location-badge">
+        <i class="fa-solid fa-location-dot"></i>
+        <span><%= listing.location %>, <%= listing.country %></span>
+      </div>
+      <div>
+        <span>Hosted by <strong>@<%= listing.owner.username %></strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Photo Banner -->
+  <div class="hero-wrapper">
+    <img src="<%= listing.image.url %>" alt="<%= listing.title %>" class="hero-img" />
+    <% if(listing.category){ %>
+      <div class="hero-tag-badge">
+        <i class="fa-solid fa-tag"></i> <%= listing.category %>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Split Grid (Description & Booking Card) -->
+  <div class="detail-grid">
+    <div>
+      <div class="host-badge-card">
+        <div class="host-meta">
+          <div class="host-avatar">
+            <%= listing.owner.username.charAt(0).toUpperCase() %>
+          </div>
+          <div>
+            <h6 class="mb-0 fw-bold">Hosted by <%= listing.owner.username %></h6>
+            <small class="text-muted"><%= listing.location %>, <%= listing.country %></small>
+          </div>
+        </div>
+      </div>
+
+      <div class="stay-desc-body">
+        <h5>About this place</h5>
+        <p class="stay-desc-text"><%= listing.description %></p>
+      </div>
+
+      <% if(currUser && listing.owner._id.equals(currUser._id)){ %>
+        <div class="owner-action-strip">
+          <a href="/listings/<%= listing._id %>/edit" class="btn-owner-edit">
+            <i class="fa-solid fa-pen-to-square me-1"></i> Edit Listing
+          </a>
+          <form action="/listings/<%= listing._id %>?_method=DELETE" method="post" class="m-0">
+            <button class="btn-owner-del">
+              <i class="fa-solid fa-trash-can me-1"></i> Delete
+            </button>
+          </form>
+        </div>
+      <% } %>
+    </div>
+
+    <div>
+      <div class="booking-card">
+        <div class="price-row">
+          <div>
+            <span class="price-val">&#8377;<%= listing.price.toLocaleString("en-IN") %></span>
+            <span class="price-unit">/ night</span>
+          </div>
+          <span class="tax-pill">+ 18% GST</span>
+        </div>
+
+        <div class="mb-3">
+          <div class="card-perk-item">
+            <i class="fa-solid fa-shield-check"></i>
+            <span>Verified stay with authentic guest reviews</span>
+          </div>
+          <div class="card-perk-item">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Instant booking confirmation available</span>
+          </div>
+          <div class="card-perk-item">
+            <i class="fa-solid fa-sparkles"></i>
+            <span>Sanitized and quality-inspected space</span>
+          </div>
+        </div>
+
+        <div class="p-3 bg-light rounded-3 text-center text-muted small">
+          Reserve directly with host @<%= listing.owner.username %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================= -->
+  <!-- PREMIUM & ADVANCED REVIEWS & RATING SECTION            -->
+  <!-- ======================================================= -->
+  <div class="premium-reviews-section">
+    
+    <%
+      let totalRating = 0;
+      let breakdown = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+      const revList = listing.reviews || [];
+      const totalReviews = revList.length;
+
+      revList.forEach(r => {
+        const rate = Number(r.rating) || 5;
+        totalRating += rate;
+        if(breakdown[rate] !== undefined) {
+          breakdown[rate]++;
+        } else {
+          breakdown[5]++;
+        }
+      });
+
+      const avgRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : "5.0";
+    %>
+
+    <!-- Performance & Stats Hero Banner -->
+    <div class="review-score-hero">
+      <div class="score-badge-panel">
+        <div class="score-big-number">
+          <%= avgRating %> <span>/ 5</span>
+        </div>
+        <p class="starability-result my-2" data-rating="<%= Math.round(Number(avgRating)) %>"></p>
+        <div class="score-caption">
+          Based on <%= totalReviews %> guest <%= totalReviews === 1 ? 'review' : 'reviews' %>
+        </div>
+      </div>
+
+      <!-- Rating Bar Breakdown -->
+      <div class="rating-breakdown-list">
+        <% [5, 4, 3, 2, 1].forEach(star => { 
+          const count = breakdown[star] || 0;
+          const pct = totalReviews > 0 ? ((count / totalReviews) * 100).toFixed(0) : 0;
+        %>
+          <div class="breakdown-row">
+            <div class="breakdown-label">
+              <span><%= star %></span> <i class="fa-solid fa-star" style="font-size: 11px; color: #ffb400;"></i>
+            </div>
+            <div class="breakdown-track">
+              <div class="breakdown-fill" style="width: <%= pct %>"></div>
+            </div>
+            <div class="breakdown-count"><%= count %></div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- Review Composer for Logged-In Users -->
+    <% if(currUser){ %>
+      <div class="premium-composer">
+        <div class="composer-head">
+          <div class="composer-icon">
+            <i class="fa-solid fa-pen-nib"></i>
+          </div>
+          <h4 class="composer-title">Write a Review</h4>
+        </div>
+
+        <form action="/listings/<%= listing._id %>/reviews" method="post" novalidate class="needs-validation">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted text-uppercase mb-2" style="letter-spacing: 0.05em;">Your Overall Rating</label>
+            <fieldset class="starability-slot">
+              <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="5" checked aria-label="No rating." />
+              <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+              <label for="first-rate1" title="Terrible">1 star</label>
+              <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+              <label for="first-rate2" title="Not good">2 stars</label>
+              <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+              <label for="first-rate3" title="Average">3 stars</label>
+              <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+              <label for="first-rate4" title="Very good">4 stars</label>
+              <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+              <label for="first-rate5" title="Amazing">5 stars</label>
+            </fieldset>
+          </div>
+
+          <div class="mb-3">
+            <label for="comment" class="form-label small fw-bold text-muted text-uppercase mb-2" style="letter-spacing: 0.05em;">Your Experience</label>
+            <textarea 
+              id="comment" 
+              name="review[comment]" 
+              rows="3" 
+              class="form-control-modern" 
+              placeholder="How was the ambiance, check-in, cleanliness, or hospitality? Share your honest feedback..." 
+              required
+            ></textarea>
+            <div class="invalid-feedback">Please provide your review feedback.</div>
+          </div>
+
+          <button type="submit" class="btn-submit-premium">Submit Feedback</button>
+        </form>
+      </div>
+    <% } %>
+
+    <!-- Cards Grid -->
+    <% if(totalReviews > 0){ %>
+      <div class="review-grid">
+        <% for(let review of revList){ %>
+          <div class="luxury-review-card">
+            <div>
+              <div class="card-top-identity">
+                <div class="user-cluster">
+                  <div class="user-badge-ring">
+                    <%= review.author.username.charAt(0).toUpperCase() %>
+                  </div>
+                  <div>
+                    <div class="user-meta-name"><%= review.author.username %></div>
+                    <div class="user-verified-tag">
+                      <i class="fa-solid fa-circle-check"></i> Verified Guest
+                    </div>
+                  </div>
+                </div>
+
+                <div class="review-chip-rating">
+                  <i class="fa-solid fa-star" style="font-size: 11px;"></i> <%= review.rating %>.0
+                </div>
+              </div>
+
+              <p class="starability-result mb-3" data-rating="<%= review.rating %>"></p>
+
+              <p class="card-quote-text">
+                "<%= review.comment %>"
+              </p>
+            </div>
+
+            <div class="card-bottom-bar">
+              <span class="text-muted small">Stay experience review</span>
+
+              <% if(currUser && review.author._id.equals(currUser._id)){ %>
+                <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="post" class="m-0">
+                  <button class="btn-trash-action" title="Delete your review">
+                    <i class="fa-regular fa-trash-can"></i>
+                  </button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    <% } else { %>
+      <div class="empty-review-showcase">
+        <div class="mb-3">
+          <i class="fa-regular fa-star fa-3x" style="color: #dcdcdc;"></i>
+        </div>
+        <h5 class="fw-bold">No Reviews Yet</h5>
+        <p class="text-muted mb-0" style="font-size: 14.5px;">Be the very first guest to experience this stay and share your journey!</p>
+      </div>
+    <% } %>
+
+  </div>
+
+</div>

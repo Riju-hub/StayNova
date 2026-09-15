@@ -1,59 +1,231 @@
 <% layout("layouts/boilerplate") %>
 
-<div class="row mt-3">
-    <div class="col-lg-8 offset-lg-2">
-        <br><br>
-    <h3>Create a new listing</h3>
-    <form action="/listings" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" id="title" name="listing[title]" placeholder="enter title" class="form-control" required>
-            <div class="valid-feedback">Title looks good</div>
-        </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea name="listing[description]" id="description" placeholder="enter description" class="form-control" required></textarea>
-            <div class="invalid-feedback">Description should be valid</div>
-        </div>
-        <div class="mb-3">
-            <label for="category" class="form-label">Category</label>
-            <select name="listing[category]" class="form-select" id="category" required>
-                <option value="Trending">Trending</option>
-                <option value="Rooms">Rooms</option>
-                <option value="Iconic Cities">Iconic Cities</option>
-                <option value="Mountains">Mountains</option>
-                <option value="Castles">Castles</option>
-                <option value="Amazing pools">Amazing pools</option>
-                <option value="Camping">Camping</option>
-                <option value="Farms">Farms</option>
-                <option value="Arctic">Arctic</option>
-            </select>
-            <div class="invalid-feedback">Please select a category</div>
-        </div>
-         <div class="mb-3">
-            <label for="image" class="form-label">Upload Listing Image</label>
-            <input type="file" id="image" name="listing[image]" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
-            <input type="text" id="location" name="listing[location]" placeholder="enter location" class="form-control" required>
-            <div class="invalid-feedback">Location should be valid</div>
+<style>
+  .listing-form-wrapper {
+    max-width: 680px;
+    margin: 2rem auto 4rem;
+    padding: 0 1rem;
+  }
 
+  .form-surface-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 24px;
+    padding: 2.25rem 2rem;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.05);
+  }
+
+  .form-title-group {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 1.25rem;
+  }
+  .form-title-group h2 {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: #1e1e1e;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.35rem;
+  }
+  .form-title-group p {
+    font-size: 14px;
+    color: #717171;
+    margin: 0;
+  }
+
+  .field-group {
+    margin-bottom: 1.25rem;
+  }
+  .field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #484848;
+    margin-bottom: 6px;
+  }
+
+  .field-input,
+  .field-select {
+    width: 100%;
+    min-height: 48px;
+    border-radius: 12px;
+    border: 1.5px solid #e0e0e0;
+    padding: 0.65rem 1rem;
+    font-size: 14.5px;
+    background-color: #fafafa;
+    color: #222;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .field-input:focus,
+  .field-select:focus {
+    background-color: #ffffff;
+    border-color: #ff385c;
+    box-shadow: 0 0 0 4px rgba(255, 56, 92, 0.12);
+    outline: none;
+  }
+
+  /* Custom File Input Staging */
+  .file-dropzone-input {
+    padding: 0.55rem 0.8rem;
+    cursor: pointer;
+    font-size: 13.5px;
+  }
+  .file-dropzone-input::file-selector-button {
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-weight: 600;
+    font-size: 12.5px;
+    color: #333;
+    margin-right: 12px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .file-dropzone-input::file-selector-button:hover {
+    background: #e4e4e4;
+  }
+
+  .btn-submit-listing {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(135deg, #ff385c 0%, #e00b41 100%);
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    margin-top: 1rem;
+    box-shadow: 0 4px 14px rgba(255, 56, 92, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+  }
+
+  .btn-submit-listing:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(255, 56, 92, 0.35);
+  }
+  .btn-submit-listing:active {
+    transform: scale(0.99);
+  }
+</style>
+
+<div class="listing-form-wrapper">
+  <div class="form-surface-card">
+    <div class="form-title-group">
+      <h2>Host a New Stay</h2>
+      <p>Fill out the details to list your property on StayNova</p>
+    </div>
+
+    <form action="/listings" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
+      
+      <!-- Title -->
+      <div class="field-group">
+        <label for="title" class="field-label">Listing Title</label>
+        <input 
+          type="text" 
+          id="title" 
+          name="listing[title]" 
+          placeholder="e.g. Modern Sea-Facing Villa with Private Pool" 
+          class="form-control field-input" 
+          required
+        >
+        <div class="invalid-feedback">Please provide an eye-catching title.</div>
+      </div>
+
+      <!-- Description -->
+      <div class="field-group">
+        <label for="description" class="field-label">Description</label>
+        <textarea 
+          name="listing[description]" 
+          id="description" 
+          rows="4" 
+          placeholder="Describe your space, amenities, and surroundings..." 
+          class="form-control field-input" 
+          style="min-height: 100px; resize: vertical;" 
+          required
+        ></textarea>
+        <div class="invalid-feedback">Please provide a valid description.</div>
+      </div>
+
+      <!-- Category Selection -->
+      <div class="field-group">
+        <label for="category" class="field-label">Property Category</label>
+        <select name="listing[category]" class="form-select field-select" id="category" required>
+          <option value="" disabled selected>Select a category</option>
+          <option value="Trending">Trending</option>
+          <option value="Rooms">Rooms</option>
+          <option value="Iconic Cities">Iconic Cities</option>
+          <option value="Mountains">Mountains</option>
+          <option value="Castles">Castles</option>
+          <option value="Amazing pools">Amazing Pools</option>
+          <option value="Camping">Camping</option>
+          <option value="Farms">Farms</option>
+          <option value="Arctic">Arctic</option>
+        </select>
+        <div class="invalid-feedback">Please select a category for proper catalog tagging.</div>
+      </div>
+
+      <!-- Image Upload -->
+      <div class="field-group">
+        <label for="image" class="field-label">Property Photo</label>
+        <input 
+          type="file" 
+          id="image" 
+          name="listing[image]" 
+          class="form-control field-input file-dropzone-input" 
+          accept="image/*"
+          required
+        >
+        <div class="invalid-feedback">A high-quality property photo is required.</div>
+      </div>
+
+      <!-- Location -->
+      <div class="field-group">
+        <label for="location" class="field-label">Street / Area / City</label>
+        <input 
+          type="text" 
+          id="location" 
+          name="listing[location]" 
+          placeholder="e.g. Candolim, North Goa" 
+          class="form-control field-input" 
+          required
+        >
+        <div class="invalid-feedback">Please enter the location.</div>
+      </div>
+
+      <!-- Price & Country Split -->
+      <div class="row g-3">
+        <div class="col-md-5 field-group">
+          <label for="price" class="field-label">Nightly Rate (&#8377;)</label>
+          <input 
+            type="number" 
+            name="listing[price]" 
+            id="price" 
+            placeholder="2500" 
+            min="100" 
+            class="form-control field-input" 
+            required
+          >
+          <div class="invalid-feedback">Valid price required.</div>
         </div>
-        <div class="row">
-            <div class="mb-3 col-md-4">
-                <label for="price" class="form-label">Price</label>
-                <input  name="listing[price]" id="price" placeholder="2000" class="form-control" required>
-                <div class="invalid-feedback">Price should be valid</div>
-            </div>
-            <div class="mb-3 col-md-8">
-                <label for="country" class="form-label">Country</label>
-                <input type="text" name="listing[country]" id="country" placeholder="India" class="form-control" required> 
-                <div class="invalid-feedback">Country should be valid</div>
-            </div>
+
+        <div class="col-md-7 field-group">
+          <label for="country" class="field-label">Country</label>
+          <input 
+            type="text" 
+            name="listing[country]" 
+            id="country" 
+            placeholder="e.g. India" 
+            class="form-control field-input" 
+            required
+          >
+          <div class="invalid-feedback">Country name is required.</div>
         </div>
-        
-        <button class="btn btn-dark add-btn mt-3">Create Listing</button><br><br>
+      </div>
+
+      <button type="submit" class="btn-submit-listing">Publish Stay</button>
     </form>
-</div>
+  </div>
 </div>

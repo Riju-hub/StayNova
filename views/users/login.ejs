@@ -1,17 +1,172 @@
 <% layout("layouts/boilerplate") %>
-<div class="row mt-3"><h3  class="col-lg-6 offset-lg-3">Login</h3>
-    <div class="col-lg-6 offset-lg-3">
-        <form action="/login" method="post" class="needs-validation" novalidate>
-            
-            <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter username" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter password" class="form-control" required>
-            </div>
-            <button class="btn btn-success mt-3">Login</button>
-        </form>
+
+<style>
+  .auth-wrapper {
+    min-height: calc(80vh - var(--nav-h-desktop, 74px));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 440px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+    padding: 2.25rem 2rem;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+  }
+
+  .auth-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+  }
+
+  .auth-header .auth-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: #fff0f2;
+    color: #ff385c;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .auth-header h3 {
+    font-weight: 700;
+    color: #1e1e1e;
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+  }
+
+  .auth-header p {
+    color: #717171;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .form-floating-custom {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .form-floating-custom label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #484848;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .form-floating-custom .form-control {
+    height: 48px;
+    border-radius: 12px;
+    border: 1.5px solid #e0e0e0;
+    padding: 0.65rem 1rem;
+    font-size: 14px;
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+  }
+
+  .form-floating-custom .form-control:focus {
+    background-color: #ffffff;
+    border-color: #ff385c;
+    box-shadow: 0 0 0 4px rgba(255, 56, 92, 0.12);
+    outline: none;
+  }
+
+  .btn-auth-submit {
+    width: 100%;
+    height: 48px;
+    background: linear-gradient(135deg, #ff385c 0%, #e00b41 100%);
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 15px;
+    box-shadow: 0 4px 14px rgba(255, 56, 92, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .btn-auth-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(255, 56, 92, 0.35);
+  }
+
+  .btn-auth-submit:active {
+    transform: scale(0.99);
+  }
+
+  .auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #f0f0f0;
+    font-size: 13.5px;
+    color: #717171;
+  }
+
+  .auth-footer a {
+    color: #ff385c;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .auth-footer a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-icon">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h3>Welcome back</h3>
+      <p>Log in to manage your bookings and listings</p>
     </div>
+
+    <form action="/login" method="post" class="needs-validation" novalidate>
+      <div class="form-floating-custom">
+        <label for="username">Username</label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          placeholder="Enter your username" 
+          class="form-control" 
+          required 
+          autocomplete="username"
+        />
+        <div class="invalid-feedback">Please enter your username.</div>
+      </div>
+
+      <div class="form-floating-custom mb-4">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          placeholder="Enter your password" 
+          class="form-control" 
+          required 
+          autocomplete="current-password"
+        />
+        <div class="invalid-feedback">Please enter your password.</div>
+      </div>
+
+      <button type="submit" class="btn btn-auth-submit">Log In</button>
+    </form>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="/signup">Sign up</a>
+    </div>
+  </div>
 </div>

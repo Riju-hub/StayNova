@@ -1,13 +1,117 @@
-<% if(success && success.length){ %>
-<div class="alert alert-success alert-dismissible fade show col-lg-6 offset-lg-3" role="alert">
-    <%= success %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-<% } %>
+<style>
+  .sn-flash-container {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 480px;
+    z-index: 1080;
+    pointer-events: none;
+  }
 
-<% if(error && error.length){ %>
-<div class="alert alert-danger alert-dismissible fade show col-lg-6 offset-lg-3" role="alert">
-    <%= error %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  .sn-toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    font-size: 14px;
+    font-weight: 500;
+    color: #222;
+    animation: snToastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .sn-toast-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  /* Success Theme */
+  .sn-toast-success .sn-toast-icon {
+    background: #eafaf1;
+    color: #27ae60;
+  }
+  .sn-toast-success {
+    border-left: 4px solid #27ae60;
+  }
+
+  /* Danger Theme */
+  .sn-toast-error .sn-toast-icon {
+    background: #fff0f2;
+    color: #ff385c;
+  }
+  .sn-toast-error {
+    border-left: 4px solid #ff385c;
+  }
+
+  .sn-toast-body {
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  .sn-toast-close {
+    background: none;
+    border: none;
+    padding: 4px;
+    color: #999;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    transition: color 0.15s, background-color 0.15s;
+  }
+  .sn-toast-close:hover {
+    color: #333;
+    background: #f0f0f0;
+  }
+
+  @keyframes snToastIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+</style>
+
+<div class="sn-flash-container">
+  <% if(success && success.length){ %>
+    <div class="sn-toast sn-toast-success alert alert-dismissible fade show" role="alert">
+      <div class="sn-toast-icon">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div class="sn-toast-body"><%= success %></div>
+      <button type="button" class="sn-toast-close" data-bs-dismiss="alert" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  <% } %>
+
+  <% if(error && error.length){ %>
+    <div class="sn-toast sn-toast-error alert alert-dismissible fade show" role="alert">
+      <div class="sn-toast-icon">
+        <i class="fa-solid fa-circle-exclamation"></i>
+      </div>
+      <div class="sn-toast-body"><%= error %></div>
+      <button type="button" class="sn-toast-close" data-bs-dismiss="alert" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  <% } %>
 </div>
-<% } %>

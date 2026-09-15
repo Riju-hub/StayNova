@@ -1,56 +1,283 @@
 <% layout("layouts/boilerplate") %>
-<div class="row mt-3">
-    <div class="col-lg-8 offset-lg-2">
-        <br><br>
-    <h3>Edit your listing</h3>
+
+<style>
+  .listing-edit-wrapper {
+    max-width: 680px;
+    margin: 2rem auto 4rem;
+    padding: 0 1rem;
+  }
+
+  .form-surface-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 24px;
+    padding: 2.25rem 2rem;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.05);
+  }
+
+  .form-title-group {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 1.25rem;
+  }
+  .form-title-group h2 {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: #1e1e1e;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.35rem;
+  }
+  .form-title-group p {
+    font-size: 14px;
+    color: #717171;
+    margin: 0;
+  }
+
+  .field-group {
+    margin-bottom: 1.25rem;
+  }
+  .field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #484848;
+    margin-bottom: 6px;
+  }
+
+  .field-input,
+  .field-select {
+    width: 100%;
+    min-height: 48px;
+    border-radius: 12px;
+    border: 1.5px solid #e0e0e0;
+    padding: 0.65rem 1rem;
+    font-size: 14.5px;
+    background-color: #fafafa;
+    color: #222;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .field-input:focus,
+  .field-select:focus {
+    background-color: #ffffff;
+    border-color: #ff385c;
+    box-shadow: 0 0 0 4px rgba(255, 56, 92, 0.12);
+    outline: none;
+  }
+
+  /* Current Preview Card */
+  .current-media-preview {
+    background: #fafafa;
+    border: 1px dashed #dcdcdc;
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .preview-thumb {
+    width: 110px;
+    height: 75px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  /* File Input Styling */
+  .file-dropzone-input {
+    padding: 0.55rem 0.8rem;
+    cursor: pointer;
+    font-size: 13.5px;
+  }
+  .file-dropzone-input::file-selector-button {
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-weight: 600;
+    font-size: 12.5px;
+    color: #333;
+    margin-right: 12px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .file-dropzone-input::file-selector-button:hover {
+    background: #e4e4e4;
+  }
+
+  /* Action Buttons */
+  .edit-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 1.5rem;
+  }
+  .btn-submit-update {
+    flex: 2;
+    height: 48px;
+    background: linear-gradient(135deg, #ff385c 0%, #e00b41 100%);
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 4px 14px rgba(255, 56, 92, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+  }
+  .btn-submit-update:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(255, 56, 92, 0.35);
+  }
+  .btn-submit-update:active {
+    transform: scale(0.99);
+  }
+
+  .btn-cancel-edit {
+    flex: 1;
+    height: 48px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    color: #333;
+    font-weight: 600;
+    font-size: 14.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .btn-cancel-edit:hover {
+    background: #f5f5f5;
+    color: #222;
+  }
+</style>
+
+<div class="listing-edit-wrapper">
+  <div class="form-surface-card">
+    <div class="form-title-group">
+      <h2>Edit Listing</h2>
+      <p>Keep your listing details and pricing up to date</p>
+    </div>
+
     <form method="post" action="/listings/<%= listing._id %>?_method=PUT" class="needs-validation" novalidate enctype="multipart/form-data">
-         <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" name="listing[title]" value="<%= listing.title %>" class="form-control" required>
-            <div class="valid-feedback">Title looks good</div>
-        </div>
-         <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea name="listing[description]" id="description" class="form-control" required><%= listing.description %></textarea>
-            <div class="invalid-feedback">Description should be valid</div>
-        </div>
-        <div class="mb-3">
-            <label for="category" class="form-label">Category</label>
-            <select name="listing[category]" class="form-select" id="category" required>
-            <% 
-                const categories = ["Trending", "Rooms", "Iconic Cities", "Mountains", "Castles", "Amazing pools", "Camping", "Farms", "Arctic"];
-                for(let cat of categories) { %>
-                <option value="<%= cat %>" <%= listing.category === cat ? 'selected' : '' %>><%= cat %></option>
-            <% } %>
-            </select>
-            <div class="invalid-feedback">Please select a category</div>
-        </div>
-        <div class="mb-3 p-3">
-            original listing Image:<br>
-            <img src="<%= originalImageUrl %>"  alt="">
-        </div>
-         <div class="mb-3">
-            <label for="image" class="form-label">Upload New Image</label>
-            <input type="file" name="listing[image]"  class="form-control">
-         </div>
-          <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
-            <input type="text" name="listing[location]" value="<%= listing.location %>" class="form-control" required>
-            <div class="invalid-feedback">Location should be valid</div>
+      
+      <!-- Title -->
+      <div class="field-group">
+        <label for="title" class="field-label">Listing Title</label>
+        <input 
+          type="text" 
+          id="title"
+          name="listing[title]" 
+          value="<%= listing.title %>" 
+          class="form-control field-input" 
+          required
+        >
+        <div class="invalid-feedback">Please enter a valid title.</div>
+      </div>
+
+      <!-- Description -->
+      <div class="field-group">
+        <label for="description" class="field-label">Description</label>
+        <textarea 
+          name="listing[description]" 
+          id="description" 
+          rows="4" 
+          class="form-control field-input" 
+          style="min-height: 100px; resize: vertical;" 
+          required
+        ><%= listing.description %></textarea>
+        <div class="invalid-feedback">Please enter a valid description.</div>
+      </div>
+
+      <!-- Category -->
+      <div class="field-group">
+        <label for="category" class="field-label">Property Category</label>
+        <select name="listing[category]" class="form-select field-select" id="category" required>
+          <% 
+            const categories = ["Trending", "Rooms", "Iconic Cities", "Mountains", "Castles", "Amazing pools", "Camping", "Farms", "Arctic"];
+            for(let cat of categories) { 
+          %>
+            <option value="<%= cat %>" <%= listing.category === cat ? 'selected' : '' %>><%= cat %></option>
+          <% } %>
+        </select>
+        <div class="invalid-feedback">Please select a category.</div>
+      </div>
+
+      <!-- Existing Photo Preview -->
+      <div class="field-group">
+        <label class="field-label">Current Property Photo</label>
+        <div class="current-media-preview">
+          <img src="<%= originalImageUrl %>" alt="Current listing photo" class="preview-thumb">
+          <div>
+            <div class="fw-semibold text-dark" style="font-size: 13.5px;">Active Cover Photo</div>
+            <small class="text-muted">Upload a new image below if you want to replace it.</small>
           </div>
-          <div class="row">
-            <div class="mb-3 col-md-4">
-                <label for="price" class="form-label">Price</label>
-                <input type="number" name="listing[price]" value="<%= listing.price %>" class="form-control" required>
-                <div class="invalid-feedback">Price should be valid</div>
-           </div>
-            <div class="mb-3 col-md-8">
-                <label for="country" class="form-label">Country</label>
-                <input type="text" name="listing[country]" value="<%= listing.country %>" class="form-control" required>
-                <div class="invalid-feedback">Country should be valid</div>
-            </div>
         </div>
-        <button class="btn btn-info edit-btn mt-3 ">Edit</button><br><br>
+      </div>
+
+      <!-- Upload Replacement Photo -->
+      <div class="field-group">
+        <label for="image" class="field-label">Upload New Photo (Optional)</label>
+        <input 
+          type="file" 
+          id="image"
+          name="listing[image]" 
+          class="form-control field-input file-dropzone-input" 
+          accept="image/*"
+        >
+      </div>
+
+      <!-- Location -->
+      <div class="field-group">
+        <label for="location" class="field-label">Location / Street</label>
+        <input 
+          type="text" 
+          id="location"
+          name="listing[location]" 
+          value="<%= listing.location %>" 
+          class="form-control field-input" 
+          required
+        >
+        <div class="invalid-feedback">Please enter the location.</div>
+      </div>
+
+      <!-- Price & Country -->
+      <div class="row g-3">
+        <div class="col-md-5 field-group">
+          <label for="price" class="field-label">Nightly Rate (&#8377;)</label>
+          <input 
+            type="number" 
+            id="price"
+            name="listing[price]" 
+            value="<%= listing.price %>" 
+            min="100" 
+            class="form-control field-input" 
+            required
+          >
+          <div class="invalid-feedback">Please enter a valid price.</div>
+        </div>
+
+        <div class="col-md-7 field-group">
+          <label for="country" class="field-label">Country</label>
+          <input 
+            type="text" 
+            id="country"
+            name="listing[country]" 
+            value="<%= listing.country %>" 
+            class="form-control field-input" 
+            required
+          >
+          <div class="invalid-feedback">Please enter the country.</div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="edit-actions">
+        <a href="/listings/<%= listing._id %>" class="btn-cancel-edit">Cancel</a>
+        <button type="submit" class="btn-submit-update">Save Changes</button>
+      </div>
+
     </form>
-</div>
+  </div>
 </div>
