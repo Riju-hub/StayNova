@@ -175,5 +175,5 @@ The project strictly follows MVC — Models define the data schemas, Views are E
 
 **Bhabasindhu Das**
 - 📧 Gmail: bhabasindhudas621@gmail.com
-- 💼 LinkedIn: [*(your LinkedIn URL)*](http://linkedin.com/in/bhabasindhu-das-71b147370)
+- 💼 LinkedIn: [LinkedIn](http://linkedin.com/in/bhabasindhu-das-dev)
 - 🐙 GitHub: [Riju-hub](https://github.com/Riju-hub)
