@@ -1,101 +1,92 @@
 <% layout("layouts/boilerplate") %>
 
 <style>
-  :root {
-    --brand-primary: #ff385c;
-    --brand-gradient: linear-gradient(135deg, #ff385c 0%, #e00b41 100%);
-    --surface-glass: rgba(255, 255, 255, 0.92);
-    --border-subtle: rgba(0, 0, 0, 0.07);
-    --text-primary: #1e1e1e;
-    --text-secondary: #717171;
-    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
-  }
-
-  body {
-    background-color: #fbfbfc;
-    background-image: 
-      radial-gradient(at 15% 10%, rgba(255, 56, 92, 0.035) 0px, transparent 45%),
-      radial-gradient(at 90% 85%, rgba(255, 90, 95, 0.035) 0px, transparent 45%);
-    background-attachment: fixed;
-    color: var(--text-primary);
-  }
-
-  .show-container {
+  /* -------------------------------------------------------------
+     HIGH-SPECIFICITY ISOLATION SCOPE
+     Overrides Bootstrap & external global CSS
+  -------------------------------------------------------------- */
+  #stay-show-scope {
     max-width: 1140px;
-    margin: 1.5rem auto 5rem;
+    margin: 6.5rem auto 5rem !important; /* Clears 5rem fixed navbar */
     padding: 0 1.25rem;
-    animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    color: #111827 !important;
   }
 
-  /* Header Section */
-  .stay-header {
-    margin-bottom: 1.5rem;
+  /* Headings & Main Info */
+  #stay-show-scope h1.stay-title {
+    font-size: 2.2rem !important;
+    font-weight: 800 !important;
+    color: #111827 !important;
+    line-height: 1.25 !important;
+    margin-bottom: 0.5rem !important;
   }
-  .stay-title {
-    font-size: 2.1rem;
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-    line-height: 1.25;
-  }
-  .stay-sub-bar {
+
+  #stay-show-scope .stay-sub-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 12px;
-    font-size: 14.5px;
-    color: var(--text-secondary);
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #374151 !important;
   }
-  .stay-location-badge {
+
+  #stay-show-scope .stay-location-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-weight: 500;
+    font-weight: 800 !important;
+    color: #111827 !important;
   }
-  .stay-location-badge i {
-    color: var(--brand-primary);
+  #stay-show-scope .stay-location-badge i {
+    color: #ff385c !important;
   }
 
-  /* Hero Showcase Media */
-  .hero-wrapper {
+  #stay-show-scope .host-header-mention {
+    color: #374151 !important;
+    font-weight: 600 !important;
+  }
+  #stay-show-scope .host-header-mention strong {
+    color: #ff385c !important;
+    font-weight: 800 !important;
+  }
+
+  /* Media Preview */
+  #stay-show-scope .hero-wrapper {
     position: relative;
     width: 100%;
     height: 480px;
     border-radius: 28px;
     overflow: hidden;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
-    background: #eaeaea;
+    background: #e5e7eb;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
   }
-  .hero-img {
+  #stay-show-scope .hero-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .hero-wrapper:hover .hero-img {
-    transform: scale(1.03);
-  }
-  .hero-tag-badge {
+  #stay-show-scope .hero-tag-badge {
     position: absolute;
     bottom: 20px;
     left: 20px;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: #fff;
-    padding: 6px 14px;
+    background: #0f172a !important;
+    color: #ffffff !important;
+    padding: 7px 16px;
     border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 13.5px;
+    font-weight: 800;
     display: inline-flex;
     align-items: center;
     gap: 6px;
   }
+  #stay-show-scope .hero-tag-badge i {
+    color: #ff385c !important;
+  }
 
-  /* Split Layout */
-  .detail-grid {
+  /* Layout Grid */
+  #stay-show-scope .detail-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -103,449 +94,435 @@
     align-items: start;
   }
   @media (min-width: 992px) {
-    .detail-grid {
+    #stay-show-scope .detail-grid {
       grid-template-columns: 1.6fr 1fr;
       gap: 2.75rem;
     }
   }
 
-  /* Host Bio & Features */
-  .host-badge-card {
+  /* Host Details */
+  #stay-show-scope .host-badge-card {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px solid #e5e7eb;
   }
-  .host-meta {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .host-avatar {
-    width: 52px;
-    height: 52px;
+  #stay-show-scope .host-avatar {
+    width: 54px;
+    height: 54px;
     border-radius: 50%;
-    background: var(--brand-gradient);
-    color: #fff;
-    font-weight: 700;
-    font-size: 20px;
+    background: linear-gradient(135deg, #ff385c 0%, #e00b41 100%);
+    color: #ffffff !important;
+    font-weight: 900;
+    font-size: 22px;
     display: grid;
     place-items: center;
-    box-shadow: 0 4px 12px rgba(255, 56, 92, 0.25);
+    box-shadow: 0 4px 14px rgba(255, 56, 92, 0.3);
   }
-  .stay-desc-body {
+  #stay-show-scope .host-name {
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    color: #111827 !important;
+  }
+  #stay-show-scope .host-sub {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #4b5563 !important;
+  }
+
+  #stay-show-scope .stay-desc-body {
     padding-top: 1.5rem;
   }
-  .stay-desc-body h5 {
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
+  #stay-show-scope .stay-desc-body h5 {
+    font-size: 1.25rem !important;
+    font-weight: 800 !important;
+    color: #111827 !important;
+    margin-bottom: 0.85rem !important;
   }
-  .stay-desc-text {
-    font-size: 15px;
-    line-height: 1.7;
-    color: #484848;
+  #stay-show-scope .stay-desc-text {
+    font-size: 16px !important;
+    line-height: 1.8 !important;
+    color: #374151 !important;
+    font-weight: 600 !important;
     white-space: pre-line;
   }
 
-  /* Booking & Pricing Floating Card */
-  .booking-card {
-    background: var(--surface-glass);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid var(--border-subtle);
-    border-radius: 24px;
-    padding: 1.75rem;
-    box-shadow: var(--shadow-soft);
-    position: sticky;
-    top: calc(var(--nav-h-desktop, 74px) + 20px);
-  }
-  .price-row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-subtle);
-  }
-  .price-val {
-    font-size: 1.75rem;
-    font-weight: 800;
-    color: var(--text-primary);
-  }
-  .price-unit {
-    color: var(--text-secondary);
-    font-size: 14px;
-  }
-  .tax-pill {
-    font-size: 12px;
-    color: var(--brand-primary);
-    background: #fff0f2;
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-weight: 600;
-  }
-  .card-perk-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 13.5px;
-    color: #555;
-    margin-bottom: 8px;
-  }
-  .card-perk-item i {
-    color: #27ae60;
-    font-size: 14px;
-  }
-
-  /* Owner Control Buttons */
-  .owner-action-strip {
-    display: flex;
-    gap: 10px;
-    margin-top: 1.25rem;
-  }
-  .btn-owner-edit {
-    flex: 1;
-    background: #f5f5f5;
-    color: var(--text-primary) !important;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 10px;
-    font-weight: 600;
-    font-size: 13.5px;
-    text-align: center;
-    text-decoration: none;
-    transition: background 0.15s ease;
-  }
-  .btn-owner-edit:hover {
-    background: #ececec;
-  }
-  .btn-owner-del {
-    background: #fff0f2;
-    color: var(--brand-primary);
-    border: 1px solid rgba(255, 56, 92, 0.2);
-    border-radius: 12px;
-    padding: 10px 16px;
-    font-weight: 600;
-    font-size: 13.5px;
-    cursor: pointer;
-    transition: background 0.15s ease;
-  }
-  .btn-owner-del:hover {
-    background: #ffe5e8;
-  }
-
-  /* =========================================
-     ADVANCED & PREMIUM REVIEWS SECTION
-     ========================================= */
-  .premium-reviews-section {
-    margin-top: 4.5rem;
-    padding-top: 2.75rem;
-    border-top: 1px solid var(--border-subtle);
-  }
-
-  /* Analytics & Rating Overview Card */
-  .review-score-hero {
-    background: #ffffff;
-    border: 1px solid var(--border-subtle);
+  /* Booking Card */
+  #stay-show-scope .booking-card {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
     border-radius: 24px;
     padding: 2rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 6.5rem;
+  }
+  #stay-show-scope .price-val {
+    font-size: 2.1rem !important;
+    font-weight: 900 !important;
+    color: #ff385c !important;
+  }
+  #stay-show-scope .price-unit {
+    color: #4b5563 !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+  }
+  #stay-show-scope .tax-pill {
+    font-size: 12.5px !important;
+    color: #be123c !important;
+    background: #ffe4e6 !important;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 800 !important;
+  }
+  #stay-show-scope .card-perk-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14.5px !important;
+    color: #111827 !important;
+    font-weight: 700 !important;
+    margin-bottom: 12px;
+  }
+  #stay-show-scope .card-perk-item i.green-icon {
+    color: #16a34a !important;
+    font-size: 17px;
+  }
+  #stay-show-scope .card-perk-item i.pink-icon {
+    color: #ff385c !important;
+    font-size: 17px;
+  }
+
+  /* Action Buttons */
+  #stay-show-scope .owner-action-strip {
+    display: flex;
+    gap: 12px;
+    margin-top: 1.5rem;
+  }
+  #stay-show-scope .btn-owner-edit {
+    flex: 1;
+    background: #f1f5f9 !important;
+    color: #111827 !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 12px;
+    padding: 11px;
+    font-weight: 800 !important;
+    text-align: center;
+    text-decoration: none;
+  }
+  #stay-show-scope .btn-owner-del {
+    background: #fee2e2 !important;
+    color: #dc2626 !important;
+    border: 1px solid #fca5a5 !important;
+    border-radius: 12px;
+    padding: 11px 20px;
+    font-weight: 800 !important;
+    cursor: pointer;
+  }
+
+  /* Reviews Overview */
+  #stay-show-scope .premium-reviews-section {
+    margin-top: 4.5rem;
+    padding-top: 2.75rem;
+    border-top: 2px solid #e2e8f0;
+  }
+  #stay-show-scope .review-score-hero {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 24px;
+    padding: 2.25rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     margin-bottom: 2.5rem;
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
   }
   @media (min-width: 768px) {
-    .review-score-hero {
-      grid-template-columns: 240px 1fr;
+    #stay-show-scope .review-score-hero {
+      grid-template-columns: 260px 1fr;
       align-items: center;
       gap: 3rem;
     }
   }
 
-  .score-badge-panel {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border-bottom: 1px solid var(--border-subtle);
-    padding-bottom: 1.5rem;
-  }
-  @media (min-width: 768px) {
-    .score-badge-panel {
-      border-bottom: none;
-      border-right: 1px solid var(--border-subtle);
-      padding-bottom: 0;
-      padding-right: 2rem;
-    }
-  }
-
-  .score-big-number {
-    font-size: 3.5rem;
-    font-weight: 900;
-    letter-spacing: -0.04em;
-    color: var(--text-primary);
-    line-height: 1;
+  #stay-show-scope .score-big-number {
+    font-size: 3.75rem !important;
+    font-weight: 900 !important;
+    color: #ff385c !important;
+    line-height: 1 !important;
     display: flex;
     align-items: baseline;
-    gap: 4px;
+    gap: 6px;
   }
-  .score-big-number span {
-    font-size: 1.25rem;
-    color: var(--text-secondary);
-    font-weight: 600;
+  #stay-show-scope .score-big-number span {
+    font-size: 1.4rem !important;
+    color: #374151 !important;
+    font-weight: 800 !important;
+  }
+  #stay-show-scope .score-caption {
+    font-size: 14.5px !important;
+    font-weight: 700 !important;
+    color: #4b5563 !important;
+    margin-top: 8px;
   }
 
-  .score-caption {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin-top: 6px;
-  }
-
-  /* Progress Bar Breakdown */
-  .rating-breakdown-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .breakdown-row {
+  #stay-show-scope .breakdown-row {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-secondary);
+    gap: 14px;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    color: #111827 !important;
   }
-  .breakdown-label {
-    width: 50px;
+  #stay-show-scope .breakdown-label {
+    width: 55px;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
+    color: #111827 !important;
   }
-  .breakdown-track {
+  #stay-show-scope .breakdown-label i {
+    color: #f59e0b !important;
+  }
+  #stay-show-scope .breakdown-track {
     flex: 1;
-    height: 7px;
-    background: #f0f0f2;
+    height: 10px;
+    background: #e2e8f0;
     border-radius: 999px;
     overflow: hidden;
   }
-  .breakdown-fill {
+  #stay-show-scope .breakdown-fill {
     height: 100%;
-    background: var(--brand-gradient);
+    background: linear-gradient(135deg, #ff385c 0%, #e00b41 100%);
     border-radius: 999px;
   }
-  .breakdown-count {
-    width: 28px;
+  #stay-show-scope .breakdown-count {
+    width: 36px;
     text-align: right;
-    font-size: 12px;
-    color: #999;
+    font-size: 13.5px !important;
+    font-weight: 800 !important;
+    color: #4b5563 !important;
   }
 
-  /* Review Composer Form */
-  .premium-composer {
-    background: #ffffff;
-    border: 1px solid var(--border-subtle);
+  /* Review Composer */
+  #stay-show-scope .composer-wrapper {
+    position: relative;
     border-radius: 24px;
-    padding: 2rem;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
     margin-bottom: 3rem;
   }
-  .composer-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 1.25rem;
+  #stay-show-scope .premium-composer {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 24px;
+    padding: 2.25rem;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
   }
-  .composer-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: #fff0f2;
-    color: var(--brand-primary);
-    display: grid;
-    place-items: center;
-    font-size: 15px;
-  }
-  .composer-title {
-    font-size: 1.15rem;
-    font-weight: 800;
+  #stay-show-scope .composer-title {
+    font-size: 1.35rem !important;
+    font-weight: 900 !important;
+    color: #111827 !important;
     margin: 0;
   }
+  #stay-show-scope .form-label-bold {
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    color: #111827 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+    display: block;
+  }
 
-  .form-control-modern {
+  /* Interactive Multi-Color Stars */
+  #stay-show-scope .rating-stars-container {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-bottom: 1rem;
+    padding: 4px 0;
+  }
+  #stay-show-scope .rating-stars-container input[type="radio"] {
+    display: none;
+  }
+  #stay-show-scope .rating-stars-container label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: #94a3b8 !important;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+  #stay-show-scope .rating-stars-container label i {
+    font-size: 20px;
+  }
+  #stay-show-scope .rating-stars-container label:hover,
+  #stay-show-scope .rating-stars-container label:hover ~ label,
+  #stay-show-scope .rating-stars-container input[type="radio"]:checked ~ label {
+    color: #f59e0b !important;
+    transform: scale(1.08);
+  }
+
+  #stay-show-scope .form-control-modern {
     width: 100%;
     border-radius: 16px;
-    border: 1.5px solid #e8e8e8;
-    padding: 14px 16px;
-    font-size: 14.5px;
-    background: #fafafa;
-    transition: all 0.2s ease;
+    border: 2px solid #cbd5e1 !important;
+    padding: 15px 18px;
+    font-size: 15.5px !important;
+    font-weight: 600 !important;
+    color: #111827 !important;
+    background: #ffffff !important;
     resize: vertical;
-    min-height: 100px;
+    min-height: 115px;
   }
-  .form-control-modern:focus {
-    background: #ffffff;
-    border-color: var(--brand-primary);
-    box-shadow: 0 0 0 4px rgba(255, 56, 92, 0.12);
+  #stay-show-scope .form-control-modern::placeholder {
+    color: #64748b !important;
+    font-weight: 500 !important;
+  }
+  #stay-show-scope .form-control-modern:focus {
+    border-color: #ff385c !important;
     outline: none;
+    box-shadow: 0 0 0 4px rgba(255, 56, 92, 0.15);
   }
 
-  .btn-submit-premium {
-    background: var(--brand-gradient);
-    border: none;
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 14.5px;
+  #stay-show-scope .btn-submit-premium {
+    background: linear-gradient(135deg, #ff385c 0%, #e00b41 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 15px !important;
     border-radius: 12px;
-    padding: 12px 28px;
-    box-shadow: 0 4px 16px rgba(255, 56, 92, 0.28);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    padding: 13px 32px;
+    box-shadow: 0 4px 18px rgba(255, 56, 92, 0.35);
     cursor: pointer;
   }
-  .btn-submit-premium:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(255, 56, 92, 0.36);
+
+  /* Guest Prompt Overlay */
+  #stay-show-scope .guest-overlay-curtain {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(4px);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    padding: 1.5rem;
+    text-align: center;
+    border: 2px dashed #ff385c;
+  }
+  #stay-show-scope .guest-auth-prompt {
+    background: #ffffff;
+    padding: 2rem 2.5rem;
+    border-radius: 22px;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+    max-width: 440px;
+  }
+  #stay-show-scope .guest-auth-title {
+    font-size: 1.25rem !important;
+    font-weight: 900 !important;
+    color: #111827 !important;
+    margin-bottom: 6px;
+  }
+  #stay-show-scope .guest-auth-sub {
+    font-size: 14.5px !important;
+    color: #4b5563 !important;
+    font-weight: 600 !important;
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+  #stay-show-scope .btn-auth-login {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff385c 0%, #e00b41 100%) !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    padding: 11px 28px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 14.5px;
+    box-shadow: 0 4px 16px rgba(255, 56, 92, 0.35);
   }
 
-  /* Modern Review Card Showcase */
-  .review-grid {
+  /* Review Cards */
+  #stay-show-scope .review-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
   @media (min-width: 768px) {
-    .review-grid {
+    #stay-show-scope .review-grid {
       grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
+      gap: 1.75rem;
     }
   }
 
-  .luxury-review-card {
-    background: #ffffff;
-    border: 1px solid var(--border-subtle);
+  #stay-show-scope .luxury-review-card {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
     border-radius: 22px;
-    padding: 1.5rem;
+    padding: 1.75rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.02);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-    position: relative;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
   }
-  .luxury-review-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-    border-color: rgba(255, 56, 92, 0.2);
-  }
-
-  .card-top-identity {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
-  .user-cluster {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .user-badge-ring {
-    width: 44px;
-    height: 44px;
+  #stay-show-scope .user-badge-ring {
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
-    background: #f4f4f6;
-    border: 2px solid #ffffff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background: #ffe4e6 !important;
+    color: #ff385c !important;
     display: grid;
     place-items: center;
-    font-weight: 800;
-    color: #333;
-    font-size: 15px;
+    font-weight: 900;
+    font-size: 18px;
   }
-  .user-meta-name {
-    font-weight: 700;
-    font-size: 15px;
-    color: var(--text-primary);
-    line-height: 1.2;
+  #stay-show-scope .user-meta-name {
+    font-weight: 800 !important;
+    font-size: 16px !important;
+    color: #111827 !important;
   }
-  .user-verified-tag {
-    font-size: 11.5px;
-    color: #27ae60;
+  #stay-show-scope .user-verified-tag {
+    font-size: 12.5px !important;
+    color: #16a34a !important;
+    font-weight: 700 !important;
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    font-weight: 600;
   }
-
-  .card-quote-text {
-    font-size: 14.5px;
-    line-height: 1.65;
-    color: #4a4a4a;
+  #stay-show-scope .card-quote-text {
+    font-size: 15.5px !important;
+    line-height: 1.7 !important;
+    color: #374151 !important;
+    font-weight: 600 !important;
     margin-bottom: 1.25rem;
-    word-break: break-word;
   }
-
-  .card-bottom-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 1rem;
-    border-top: 1px solid #f6f6f6;
-  }
-  .review-chip-rating {
-    background: #fff8f8;
-    color: var(--brand-primary);
+  #stay-show-scope .review-chip-rating {
+    background: #fef3c7 !important;
+    color: #b45309 !important;
     border-radius: 8px;
-    padding: 3px 8px;
-    font-weight: 700;
-    font-size: 12.5px;
+    padding: 4px 10px;
+    font-weight: 800 !important;
+    font-size: 13.5px !important;
     display: inline-flex;
     align-items: center;
     gap: 4px;
   }
-
-  .btn-trash-action {
-    background: transparent;
-    border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    color: #aaa;
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
+  #stay-show-scope .review-chip-rating i {
+    color: #f59e0b !important;
   }
-  .btn-trash-action:hover {
-    color: var(--brand-primary);
-    background: #fff0f2;
-  }
-
-  .empty-review-showcase {
-    text-align: center;
-    padding: 3.5rem 1.5rem;
-    background: #ffffff;
-    border-radius: 24px;
-    border: 2px dashed #ececec;
-  }
-
-  @keyframes fadeSlideUp {
-    from {
-      opacity: 0;
-      transform: translateY(14px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  #stay-show-scope .review-footer-text {
+    color: #64748b !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
   }
 </style>
 
-<div class="show-container">
+<div id="stay-show-scope">
   
   <!-- Listing Header -->
   <div class="stay-header">
@@ -555,7 +532,7 @@
         <i class="fa-solid fa-location-dot"></i>
         <span><%= listing.location %>, <%= listing.country %></span>
       </div>
-      <div>
+      <div class="host-header-mention">
         <span>Hosted by <strong>@<%= listing.owner.username %></strong></span>
       </div>
     </div>
@@ -566,22 +543,23 @@
     <img src="<%= listing.image.url %>" alt="<%= listing.title %>" class="hero-img" />
     <% if(listing.category){ %>
       <div class="hero-tag-badge">
-        <i class="fa-solid fa-tag"></i> <%= listing.category %>
+        <i class="fa-solid fa-tag"></i>
+        <span><%= listing.category %></span>
       </div>
     <% } %>
   </div>
 
-  <!-- Split Grid (Description & Booking Card) -->
+  <!-- Split Grid -->
   <div class="detail-grid">
     <div>
       <div class="host-badge-card">
-        <div class="host-meta">
+        <div class="d-flex align-items-center gap-3">
           <div class="host-avatar">
             <%= listing.owner.username.charAt(0).toUpperCase() %>
           </div>
           <div>
-            <h6 class="mb-0 fw-bold">Hosted by <%= listing.owner.username %></h6>
-            <small class="text-muted"><%= listing.location %>, <%= listing.country %></small>
+            <div class="host-name">Hosted by <%= listing.owner.username %></div>
+            <div class="host-sub"><%= listing.location %>, <%= listing.country %></div>
           </div>
         </div>
       </div>
@@ -607,7 +585,7 @@
 
     <div>
       <div class="booking-card">
-        <div class="price-row">
+        <div class="price-row d-flex align-items-baseline justify-content-between mb-3 pb-3 border-bottom">
           <div>
             <span class="price-val">&#8377;<%= listing.price.toLocaleString("en-IN") %></span>
             <span class="price-unit">/ night</span>
@@ -617,31 +595,28 @@
 
         <div class="mb-3">
           <div class="card-perk-item">
-            <i class="fa-solid fa-shield-check"></i>
+            <i class="fa-solid fa-circle-check green-icon"></i>
             <span>Verified stay with authentic guest reviews</span>
           </div>
           <div class="card-perk-item">
-            <i class="fa-solid fa-bolt"></i>
+            <i class="fa-solid fa-bolt pink-icon"></i>
             <span>Instant booking confirmation available</span>
           </div>
           <div class="card-perk-item">
-            <i class="fa-solid fa-sparkles"></i>
+            <i class="fa-solid fa-wand-magic-sparkles pink-icon"></i>
             <span>Sanitized and quality-inspected space</span>
           </div>
         </div>
 
-        <div class="p-3 bg-light rounded-3 text-center text-muted small">
-          Reserve directly with host @<%= listing.owner.username %>
+        <div class="p-3 bg-light rounded-3 text-center fw-bold small text-secondary" style="border: 1px solid #e5e7eb;">
+          Reserve directly with host <span style="color: #ff385c;">@<%= listing.owner.username %></span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ======================================================= -->
-  <!-- PREMIUM & ADVANCED REVIEWS & RATING SECTION            -->
-  <!-- ======================================================= -->
+  <!-- Reviews & Rating Section -->
   <div class="premium-reviews-section">
-    
     <%
       let totalRating = 0;
       let breakdown = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
@@ -667,24 +642,28 @@
         <div class="score-big-number">
           <%= avgRating %> <span>/ 5</span>
         </div>
-        <p class="starability-result my-2" data-rating="<%= Math.round(Number(avgRating)) %>"></p>
+        <div class="d-flex align-items-center gap-1 my-2" style="color: #f59e0b; font-size: 1.25rem;">
+          <% for(let i = 1; i <= 5; i++) { %>
+            <i class="fa-solid fa-star <%= i <= Math.round(Number(avgRating)) ? '' : 'text-black-50' %>"></i>
+          <% } %>
+        </div>
         <div class="score-caption">
           Based on <%= totalReviews %> guest <%= totalReviews === 1 ? 'review' : 'reviews' %>
         </div>
       </div>
 
       <!-- Rating Bar Breakdown -->
-      <div class="rating-breakdown-list">
+      <div class="d-flex flex-column gap-2">
         <% [5, 4, 3, 2, 1].forEach(star => { 
           const count = breakdown[star] || 0;
           const pct = totalReviews > 0 ? ((count / totalReviews) * 100).toFixed(0) : 0;
         %>
           <div class="breakdown-row">
             <div class="breakdown-label">
-              <span><%= star %></span> <i class="fa-solid fa-star" style="font-size: 11px; color: #ffb400;"></i>
+              <span><%= star %></span> <i class="fa-solid fa-star" style="font-size: 12px;"></i>
             </div>
             <div class="breakdown-track">
-              <div class="breakdown-fill" style="width: <%= pct %>"></div>
+              <div class="breakdown-fill" style="width: <%= pct %>%"></div>
             </div>
             <div class="breakdown-count"><%= count %></div>
           </div>
@@ -692,36 +671,53 @@
       </div>
     </div>
 
-    <!-- Review Composer for Logged-In Users -->
-    <% if(currUser){ %>
-      <div class="premium-composer">
-        <div class="composer-head">
-          <div class="composer-icon">
-            <i class="fa-solid fa-pen-nib"></i>
+    <!-- Review Composer -->
+    <div class="composer-wrapper">
+      <% if(!currUser){ %>
+        <div class="guest-overlay-curtain">
+          <div class="guest-auth-prompt">
+            <div class="mb-3">
+              <i class="fa-solid fa-lock" style="font-size: 26px; color: #ff385c;"></i>
+            </div>
+            <h4 class="guest-auth-title">Log in to leave a review</h4>
+            <p class="guest-auth-sub">Share your stay experience, tips, and thoughts with the StayNova community.</p>
+            <a href="/login" class="btn-auth-login">
+              <i class="fa-solid fa-arrow-right-to-bracket me-1"></i> Log In to Review
+            </a>
           </div>
+        </div>
+      <% } %>
+
+      <div class="premium-composer">
+        <div class="d-flex align-items-center gap-2 mb-4">
+          <i class="fa-solid fa-pen-nib" style="font-size: 20px; color: #ff385c;"></i>
           <h4 class="composer-title">Write a Review</h4>
         </div>
 
         <form action="/listings/<%= listing._id %>/reviews" method="post" novalidate class="needs-validation">
           <div class="mb-3">
-            <label class="form-label small fw-bold text-muted text-uppercase mb-2" style="letter-spacing: 0.05em;">Your Overall Rating</label>
-            <fieldset class="starability-slot">
-              <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="5" checked aria-label="No rating." />
-              <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-              <label for="first-rate1" title="Terrible">1 star</label>
-              <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-              <label for="first-rate2" title="Not good">2 stars</label>
-              <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-              <label for="first-rate3" title="Average">3 stars</label>
-              <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-              <label for="first-rate4" title="Very good">4 stars</label>
-              <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-              <label for="first-rate5" title="Amazing">5 stars</label>
-            </fieldset>
+            <label class="form-label-bold">Your Overall Rating</label>
+            
+            <div class="rating-stars-container">
+              <input type="radio" id="rate5" name="review[rating]" value="5" checked <%= !currUser ? 'disabled' : '' %> />
+              <label for="rate5" title="5 Stars">5 <i class="fa-solid fa-star"></i></label>
+
+              <input type="radio" id="rate4" name="review[rating]" value="4" <%= !currUser ? 'disabled' : '' %> />
+              <label for="rate4" title="4 Stars">4 <i class="fa-solid fa-star"></i></label>
+
+              <input type="radio" id="rate3" name="review[rating]" value="3" <%= !currUser ? 'disabled' : '' %> />
+              <label for="rate3" title="3 Stars">3 <i class="fa-solid fa-star"></i></label>
+
+              <input type="radio" id="rate2" name="review[rating]" value="2" <%= !currUser ? 'disabled' : '' %> />
+              <label for="rate2" title="2 Stars">2 <i class="fa-solid fa-star"></i></label>
+
+              <input type="radio" id="rate1" name="review[rating]" value="1" <%= !currUser ? 'disabled' : '' %> />
+              <label for="rate1" title="1 Star">1 <i class="fa-solid fa-star"></i></label>
+            </div>
           </div>
 
           <div class="mb-3">
-            <label for="comment" class="form-label small fw-bold text-muted text-uppercase mb-2" style="letter-spacing: 0.05em;">Your Experience</label>
+            <label for="comment" class="form-label-bold">Your Experience</label>
             <textarea 
               id="comment" 
               name="review[comment]" 
@@ -729,23 +725,24 @@
               class="form-control-modern" 
               placeholder="How was the ambiance, check-in, cleanliness, or hospitality? Share your honest feedback..." 
               required
+              <%= !currUser ? 'disabled' : '' %>
             ></textarea>
             <div class="invalid-feedback">Please provide your review feedback.</div>
           </div>
 
-          <button type="submit" class="btn-submit-premium">Submit Feedback</button>
+          <button type="submit" class="btn-submit-premium" <%= !currUser ? 'disabled' : '' %>>Submit Feedback</button>
         </form>
       </div>
-    <% } %>
+    </div>
 
-    <!-- Cards Grid -->
+    <!-- Review Cards Grid -->
     <% if(totalReviews > 0){ %>
       <div class="review-grid">
         <% for(let review of revList){ %>
           <div class="luxury-review-card">
             <div>
-              <div class="card-top-identity">
-                <div class="user-cluster">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center gap-3">
                   <div class="user-badge-ring">
                     <%= review.author.username.charAt(0).toUpperCase() %>
                   </div>
@@ -758,23 +755,27 @@
                 </div>
 
                 <div class="review-chip-rating">
-                  <i class="fa-solid fa-star" style="font-size: 11px;"></i> <%= review.rating %>.0
+                  <i class="fa-solid fa-star"></i> <%= review.rating %>.0
                 </div>
               </div>
 
-              <p class="starability-result mb-3" data-rating="<%= review.rating %>"></p>
+              <div class="mb-2" style="color: #f59e0b; font-size: 14px;">
+                <% for(let i = 1; i <= 5; i++) { %>
+                  <i class="fa-solid fa-star <%= i <= review.rating ? '' : 'text-black-50' %>"></i>
+                <% } %>
+              </div>
 
               <p class="card-quote-text">
                 "<%= review.comment %>"
               </p>
             </div>
 
-            <div class="card-bottom-bar">
-              <span class="text-muted small">Stay experience review</span>
+            <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+              <span class="review-footer-text">Stay experience review</span>
 
               <% if(currUser && review.author._id.equals(currUser._id)){ %>
                 <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="post" class="m-0">
-                  <button class="btn-trash-action" title="Delete your review">
+                  <button class="btn btn-sm btn-outline-danger border-0" title="Delete your review">
                     <i class="fa-regular fa-trash-can"></i>
                   </button>
                 </form>
@@ -784,12 +785,12 @@
         <% } %>
       </div>
     <% } else { %>
-      <div class="empty-review-showcase">
+      <div class="text-center py-5 bg-white rounded-4 border border-2 border-dashed">
         <div class="mb-3">
-          <i class="fa-regular fa-star fa-3x" style="color: #dcdcdc;"></i>
+          <i class="fa-regular fa-star fa-3x" style="color: #cbd5e1;"></i>
         </div>
-        <h5 class="fw-bold">No Reviews Yet</h5>
-        <p class="text-muted mb-0" style="font-size: 14.5px;">Be the very first guest to experience this stay and share your journey!</p>
+        <h5 class="fw-bold" style="color: #111827;">No Reviews Yet</h5>
+        <p class="mb-0" style="color: #64748b; font-size: 15px; font-weight: 600;">Be the very first guest to experience this stay and share your journey!</p>
       </div>
     <% } %>
 
